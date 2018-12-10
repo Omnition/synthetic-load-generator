@@ -1,0 +1,59 @@
+{
+  "topology" : {
+    "services" : [
+      {
+        "serviceName" : "frontend",
+        "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f" ],
+        "tags" : { "version" : "v125", "region" : "us-east-1" },
+        "routes" : [
+          {
+            "route" : "/product",
+            "downstreamCalls" : { "productcatalogservice" :  "/ListProducts" },
+            "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1000 }
+          },
+          {
+            "route" : "/cart",
+            "downstreamCalls" : { "cartservice" :  "/GetCart" },
+            "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1000 }
+          }
+        ]
+      },
+      {
+        "serviceName" : "productcatalogservice",
+        "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
+        "tags" : { "version" : "v52", "region" : "us-east-1" },
+        "routes" : [
+          {
+            "route" : "/ListProducts",
+            "downstreamCalls" : { },
+            "operationModel" : { "errorPercent" : 20, "errorCode" : 503, "maxLatencyMillis" : 2000 }
+          }
+        ]
+      },
+      {
+        "serviceName" : "cartservice",
+        "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
+        "tags" : { "version" : "v5", "region" : "us-east-1" },
+        "routes" : [
+          {
+            "route" : "/GetCart",
+            "downstreamCalls" : { },
+            "operationModel" : { "errorPercent" : 10, "errorCode" : 503, "maxLatencyMillis" : 2000 }
+          }
+        ]
+      }
+    ]
+  },
+  "rootRoutes" : [
+    {
+      "service" : "frontend",
+      "route" : "/product",
+      "tracesPerHour" : 3600
+    },
+    {
+      "service" : "frontend",
+      "route" : "/cart",
+      "tracesPerHour" : 3600
+    }
+  ]
+}
