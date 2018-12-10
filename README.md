@@ -5,14 +5,21 @@ data (traces, metrics, logs, events) for a simulated microservice-based applicat
 The application is modeled through its topology and operation models for each
 of the components within the topology.
 
-## Building and running
+## Building the Docker image
 
-Building:
+Invoke the Makefile:
+```
+make build
+```
+
+## Building and running locally
+
+Building the JAR:
 ```
 mvn package
 ```
 
-Running with sample topology:
+Running locally with sample topology:
 ```
 java -jar ./target/SyntheticLoadGenerator-1.0-SNAPSHOT-jar-with-dependencies.jar  --paramsFile ./topologies/hipster-shop.json --jaegerCollectorUrl http://localhost:14268
 ```
