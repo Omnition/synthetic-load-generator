@@ -46,7 +46,7 @@
           {
             "route" : "/SearchProducts",
             "downstreamCalls" : { },
-            "operationModel" : { "errorPercent" : 5, "errorCode" : 503, "maxLatencyMillis" : 400 }
+            "operationModel" : { "errorPercent" : 15, "errorCode" : 503, "maxLatencyMillis" : 400 }
           }
         ]
       },
@@ -82,7 +82,7 @@
           {
             "route" : "/PlaceOrder",
             "downstreamCalls" : { "paymentservice" : "/CreditCardInfo", "shippingservice" : "/Address", "currencyservice" : "/GetConversion", "cartservice" : "/GetCart", "emailservice" : "/SendOrderConfirmation" },
-            "operationModel" : { "errorPercent" : 10, "errorCode" : 503, "maxLatencyMillis" : 500 }
+            "operationModel" : { "errorPercent" : 25, "errorCode" : 503, "maxLatencyMillis" : 500 }
           }
         ]
       },
@@ -133,7 +133,7 @@
           {
             "route" : "/SendOrderConfirmation",
             "downstreamCalls" : { "emailservice" : "/OrderResult" },
-            "operationModel" : { "errorPercent" : 5, "errorCode" : 550, "maxLatencyMillis" : 500 }
+            "operationModel" : { "errorPercent" : 15, "errorCode" : 550, "maxLatencyMillis" : 500 }
           },
           {
             "route" : "/OrderResult",
