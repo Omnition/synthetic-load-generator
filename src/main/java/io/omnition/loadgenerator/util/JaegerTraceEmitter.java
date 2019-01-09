@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import io.jaegertracing.reporters.Reporter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.log4j.Logger;
 
 import io.jaegertracing.Tracer;
 import io.jaegertracing.Tracer.Builder;
-import io.jaegertracing.exceptions.SenderException;
 import io.jaegertracing.reporters.RemoteReporter;
 import io.jaegertracing.samplers.ConstSampler;
 import io.jaegertracing.senders.HttpSender;
@@ -21,13 +21,14 @@ import io.omnition.loadgenerator.model.trace.KeyValue;
 import io.omnition.loadgenerator.model.trace.Service;
 import io.omnition.loadgenerator.model.trace.Span;
 import io.omnition.loadgenerator.model.trace.Trace;
-import io.opentracing.Tracer.SpanBuilder;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMapInjectAdapter;
 
 public class JaegerTraceEmitter implements ITraceEmitter {
+
     private final static Logger logger = Logger.getLogger(JaegerTraceEmitter.class);
-    private final Map<String, TracerWrapper> serviceNameToTracer = new HashMap<>();
+
+    private final Map<String, Tracer> serviceNameToTracer = new HashMap<>();
     private final String collectorUrl;
     private final int flushIntervalMillis;
 
@@ -37,67 +38,38 @@ public class JaegerTraceEmitter implements ITraceEmitter {
     }
 
     public void close() {
-        serviceNameToTracer.forEach((name, tracer) -> {
-            try {
-                tracer.sender.flush();
-                tracer.tracer.close();
-            } catch (SenderException e) {
-                logger.warn(String.format("Error when flushing trace for service %s", name), e);
-                throw new IllegalArgumentException(e);
-            }
-        });
+        serviceNameToTracer.forEach((name, tracer) -> tracer.close());
     }
 
     public String emit(Trace trace) {
-        final MutableObject<String> traceId = new MutableObject<String>(null);
-        final Map<UUID, io.opentracing.Span> spanIdToOtSpan = new HashMap<>();
+        final MutableObject<String> traceId = new MutableObject<>(null);
+        final Map<UUID, io.opentracing.Span> convertedSpans = new HashMap<>();
         Consumer<Span> createOtSpan = span -> {
             boolean extract = StringUtils.isEmpty(traceId.getValue());
-            String tid = this.createOtSpanForModelSpan(span, spanIdToOtSpan, extract);
+            Tracer tracer = getTracer(span.service);
+            io.opentracing.Span otSpan = OpenTracingTraceConverter.createOTSpan(
+                tracer, span, convertedSpans
+            );
+            convertedSpans.put(span.id, otSpan);
             if (extract) {
-                traceId.setValue(tid);
+                traceId.setValue(extractTraceId(tracer, otSpan));
             }
         };
         Consumer<Span> closeOtSpan = span -> {
             // mark span as closed
-            spanIdToOtSpan.get(span.id).finish(span.endTimeMicros);
+            convertedSpans.get(span.id).finish(span.endTimeMicros);
         };
         TraceTraversal.prePostOrder(trace, createOtSpan, closeOtSpan);
         return traceId.getValue();
     }
 
-    private String createOtSpanForModelSpan(
-            Span span, Map<UUID, io.opentracing.Span> spanIdToOtSpan, boolean extractTraceId) {
-        Tracer tracer = getTracer(span.service).tracer;
-        SpanBuilder otSpanBld = tracer.buildSpan(span.operationName)
-                .withStartTimestamp(span.startTimeMicros);
-        for (KeyValue tag : span.tags) {
-            this.addModelTag(tag, otSpanBld);
-        }
-        span.refs.forEach(ref -> {
-            switch (ref.refType) {
-            case CHILD_OF:
-                otSpanBld.addReference(io.opentracing.References.CHILD_OF,
-                        spanIdToOtSpan.get(ref.fromSpanId).context());
-                break;
-            case FOLLOWS_FROM:
-                otSpanBld.addReference(io.opentracing.References.FOLLOWS_FROM,
-                        spanIdToOtSpan.get(ref.fromSpanId).context());
-                break;
-            default:
-                break;
-            }
-        });
-        io.opentracing.Span otSpan = otSpanBld.start();
-        spanIdToOtSpan.put(span.id, otSpan);
-
-        if (extractTraceId) {
-            return this.extractTraceId(tracer, otSpan);
-        } else {
-            return null;
-        }
-    }
-
+    /**
+     * This extracts the jaeger-header traceID from an opentracing span.
+     *
+     * @param tracer tracer to use to extract the jaeger header trace id
+     * @param otSpan span from which to extract the traceID
+     * @return string traceID or null if could not decode
+     */
     private String extractTraceId(Tracer tracer, io.opentracing.Span otSpan) {
         HashMap<String, String> baggage = new HashMap<>();
         TextMapInjectAdapter map = new TextMapInjectAdapter(baggage);
@@ -111,39 +83,23 @@ public class JaegerTraceEmitter implements ITraceEmitter {
         }
     }
 
-    private SpanBuilder addModelTag(KeyValue tag, SpanBuilder otSpanBld) {
-        if (tag.valueType.equalsIgnoreCase(KeyValue.STRING_VALUE_TYPE)) {
-            otSpanBld = otSpanBld.withTag(tag.key, tag.valueString);
-        } else if (tag.valueType.equalsIgnoreCase(KeyValue.BOOLEAN_VALUE_TYPE)) {
-            otSpanBld = otSpanBld.withTag(tag.key, tag.valueBool);
-        } else if (tag.valueType.equalsIgnoreCase(KeyValue.LONG_VALUE_TYPE)) {
-            otSpanBld = otSpanBld.withTag(tag.key, tag.valueLong);
-        } // other types are ignored for now
-        return otSpanBld;
-    }
-
-    private TracerWrapper getTracer(Service service) {
+    private Tracer getTracer(Service service) {
         return this.serviceNameToTracer.computeIfAbsent(service.serviceName,
-                s -> new TracerWrapper(this.collectorUrl, service, this.flushIntervalMillis));
+                s -> createJaegerTracer(collectorUrl, service, flushIntervalMillis));
     }
 
-    private static final class TracerWrapper {
-        public HttpSender sender;
-        public RemoteReporter reporter;
-        public Tracer tracer;
-
-        public TracerWrapper(String collectorUrl, Service svc, int flushIntervalMillis) {
-            sender = new HttpSender.Builder(collectorUrl + "/api/traces").build();
-            reporter = new RemoteReporter.Builder().withSender(sender)
-                    .withMaxQueueSize(100000)
-                    .withFlushInterval(flushIntervalMillis)
-                    .build();
-            Builder bld = new Builder(svc.serviceName).withReporter(reporter)
-                    .withSampler(new ConstSampler(true));
-            for (KeyValue kv : svc.tags) {
-                bld.withTag(kv.key, kv.valueString);
-            }
-            tracer = bld.build();
+    private static Tracer createJaegerTracer(String collectorUrl, Service svc, int flushIntervalMillis) {
+        HttpSender sender = new HttpSender.Builder(collectorUrl + "/api/traces").build();
+        Reporter reporter = new RemoteReporter.Builder().withSender(sender)
+                .withMaxQueueSize(100000)
+                .withFlushInterval(flushIntervalMillis)
+                .build();
+        Builder bld = new Builder(svc.serviceName).withReporter(reporter)
+                .withSampler(new ConstSampler(true));
+        for (KeyValue kv : svc.tags) {
+            bld.withTag(kv.key, kv.valueString);
         }
+        return bld.build();
     }
+
 }

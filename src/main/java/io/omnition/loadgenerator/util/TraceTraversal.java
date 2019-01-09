@@ -12,8 +12,12 @@ public class TraceTraversal {
         prePostOrder(trace, trace.rootSpan, preVisitConsumer, postVisitConsumer);
     }
 
-    private static void prePostOrder(Trace trace, Span span, Consumer<Span> preVisitConsumer,
-            Consumer<Span> postVisitConsumer) {
+    private static void prePostOrder(
+        Trace trace,
+        Span span,
+        Consumer<Span> preVisitConsumer,
+        Consumer<Span> postVisitConsumer
+    ) {
         preVisitConsumer.accept(span);
         List<Reference> outgoing = trace.spanIdToOutgoingRefs.get(span.id);
         if (outgoing != null) {
