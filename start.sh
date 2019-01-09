@@ -5,13 +5,15 @@ if [ -z "${TOPOLOGY_FILE}" ]; then TOPOLOGY_FILE=topologies/hipster-shop.json; f
 
 PARAMS="--jaegerCollectorUrl ${JAEGER_COLLECTOR_URL}"
 
-if [ -z "${ZIPKINV1_COLLECTOR_URL}" ]; then
-    PARAMS=$PARAMS "--zipkinV1CollectorUrl ${ZIPKINV1_COLLECTOR_URL}"
+if [ ! -z "${ZIPKINV1_COLLECTOR_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV1CollectorUrl ${ZIPKINV1_COLLECTOR_URL}"
 fi
 
-if [ -z "${ZIPKINV2_COLLECTOR_URL}" ]; then
-    PARAMS=$PARAMS "--zipkinV2CollectorUrl ${ZIPKINV2_COLLECTOR_URL}"
+if [ ! -z "${ZIPKINV2_COLLECTOR_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV2CollectorUrl ${ZIPKINV2_COLLECTOR_URL}"
 fi
+
+echo "using params: " $PARAMS
 
 java -jar synthetic-load-generator.jar \
     --paramsFile ${TOPOLOGY_FILE} \
