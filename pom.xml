@@ -17,7 +17,9 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <version.io.jaegertracing>0.28.0</version.io.jaegertracing>
     <version.io.opentracing.brave>0.33.9</version.io.opentracing.brave>
-    <version.io.zipkin.reporter2>2.0.0</version.io.zipkin.reporter2>
+    <version.io.zipkin.brave>5.6.0</version.io.zipkin.brave>
+    <version.io.zipkin.reporter2>2.7.13</version.io.zipkin.reporter2>
+    <version.io.zipkin>2.11.12</version.io.zipkin>
     <version.log4j>1.2.17</version.log4j>
     <version.slf4j>1.7.5</version.slf4j>
     <version.apache.commons>3.7</version.apache.commons>
@@ -42,6 +44,17 @@
       <groupId>io.opentracing.brave</groupId>
       <artifactId>brave-opentracing</artifactId>
       <version>${version.io.opentracing.brave}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.zipkin.brave</groupId>
+      <artifactId>brave-instrumentation-okhttp3</artifactId>
+      <version>${version.io.zipkin.brave}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.zipkin.zipkin2</groupId>
+      <artifactId>zipkin</artifactId>
+      <version>${version.io.zipkin}</version>
     </dependency>
 
     <dependency>

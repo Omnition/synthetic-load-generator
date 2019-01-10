@@ -3,8 +3,8 @@ package io.omnition.loadgenerator.util;
 import brave.Tracing;
 import brave.opentracing.BraveTracer;
 import brave.propagation.B3Propagation;
-import brave.propagation.ExtraFieldPropagation;
 import brave.propagation.Propagation;
+import brave.sampler.Sampler;
 import io.omnition.loadgenerator.model.trace.Service;
 import io.omnition.loadgenerator.model.trace.Trace;
 import io.opentracing.Span;
@@ -14,6 +14,7 @@ import io.opentracing.propagation.TextMapInjectAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.log4j.Logger;
+import zipkin2.codec.SpanBytesEncoder;
 import zipkin2.reporter.AsyncReporter;
 import zipkin2.reporter.Reporter;
 import zipkin2.reporter.Sender;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 
 public class ZipkinTraceEmitter implements ITraceEmitter {
 
-    private static final Logger logger = Logger.getLogger(JaegerTraceEmitter.class);
+    private static final Logger logger = Logger.getLogger(ZipkinTraceEmitter.class);
     private static final String V2_API = "/api/v2/spans";
     private static final String V1_API = "/api/v1/spans";
 
@@ -70,7 +71,7 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
         TextMapInjectAdapter map = new TextMapInjectAdapter(baggage);
         tracer.inject(otSpan.context(), Format.Builtin.HTTP_HEADERS, map);
         try {
-            String encodedTraceId = URLDecoder.decode(baggage.get("uber-trace-id"), "UTF-8");
+            String encodedTraceId = URLDecoder.decode(baggage.get("X-B3-TraceId"), "UTF-8");
             return encodedTraceId.split(":")[0];
         } catch (UnsupportedEncodingException e) {
             logger.error(e);
@@ -89,14 +90,19 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
             queryPath = V1_API;
         }
         Sender sender = OkHttpSender.create(collectorUrl + queryPath);
-        Reporter<zipkin2.Span> spanReporter = AsyncReporter.create(sender);
-        Propagation.Factory propagationFactory = ExtraFieldPropagation.newFactoryBuilder(B3Propagation.FACTORY)
-                .build();
-        Tracing braveTracing = Tracing.newBuilder()
+        Reporter<zipkin2.Span> spanReporter;
+        if (!useZipkinV2) {
+            spanReporter = AsyncReporter.builder(sender).build(SpanBytesEncoder.JSON_V1);
+        } else {
+            spanReporter = AsyncReporter.create(sender);
+        }
+        Propagation.Factory propagationFactory = B3Propagation.FACTORY;
+        Tracing.Builder braveTracingB = Tracing.newBuilder()
                 .localServiceName(svc.serviceName)
                 .propagationFactory(propagationFactory)
                 .spanReporter(spanReporter)
-                .build();
+                .sampler(Sampler.ALWAYS_SAMPLE);
+        Tracing braveTracing = braveTracingB.build();
         return BraveTracer.create(braveTracing);
     }
 

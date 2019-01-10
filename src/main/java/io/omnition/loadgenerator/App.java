@@ -113,7 +113,7 @@ public class App {
             emitters.add(new ZipkinTraceEmitter(zipkinV1CollectorUrl, false));
         }
         if (zipkinV2CollectorUrl != null) {
-            emitters.add(new ZipkinTraceEmitter(zipkinV1CollectorUrl, true));
+            emitters.add(new ZipkinTraceEmitter(zipkinV2CollectorUrl, true));
         }
         if (emitters.size() == 0) {
             logger.error("No emitters specified.");
