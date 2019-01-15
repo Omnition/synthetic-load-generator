@@ -49,7 +49,7 @@ public class TraceGenerator {
         span.operationName = route.route;
         span.service = service;
         span.setHttpMethod("GET");
-        span.setHttpUrl(String.format("http://" + serviceTier.serviceName + routeName));
+        span.setHttpUrl("http://" + serviceTier.serviceName + routeName);
         List<KeyValue> tags = serviceTier.tags.entrySet().stream()
                 .map(t -> KeyValue.ofStringType(t.getKey(), t.getValue())).collect(Collectors.toList());
         span.tags.addAll(tags);
