@@ -21,6 +21,8 @@ import io.omnition.loadgenerator.LoadGeneratorParams.RootServiceRoute;
 import io.omnition.loadgenerator.util.JaegerTraceEmitter;
 import io.omnition.loadgenerator.util.ScheduledTraceGenerator;
 
+import zipkin2.codec.SpanBytesEncoder;
+
 public class App {
     private final static Logger logger = Logger.getLogger(App.class);
 
@@ -30,11 +32,17 @@ public class App {
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
 
-    @Parameter(names = "--zipkinV1CollectorUrl", description = "URL of the zipkinV1 collector", required = false)
-    private String zipkinV1CollectorUrl = null;
+    @Parameter(names = "--zipkinV1JsonUrl", description = "URL of the zipkinV1 json collector", required = false)
+    private String zipkinV1JsonUrl = null;
 
-    @Parameter(names = "--zipkinV2CollectorUrl", description = "URL of the zipkinV2 collector", required = false)
-    private String zipkinV2CollectorUrl = null;
+    @Parameter(names = "--zipkinV1ThriftUrl", description = "URL of the zipkinV1 Thrift collector", required = false)
+    private String zipkinV1ThriftUrl = null;
+
+    @Parameter(names = "--zipkinV2JsonUrl", description = "URL of the zipkinV2 json collector", required = false)
+    private String zipkinV2JsonUrl = null;
+
+    @Parameter(names = "--zipkinV2Proto3Url", description = "URL of the zipkinV2 proto3 collector", required = false)
+    private String zipkinV2Proto3Url = null;
 
     @Parameter(names = "--flushIntervalMillis", description = "How often to flush traces", required = false)
     private long flushIntervalMillis = TimeUnit.SECONDS.toMillis(5);
@@ -109,11 +117,17 @@ public class App {
         if (jaegerCollectorUrl != null) {
             emitters.add(new JaegerTraceEmitter(jaegerCollectorUrl, (int) flushIntervalMillis));
         }
-        if (zipkinV1CollectorUrl != null) {
-            emitters.add(new ZipkinTraceEmitter(zipkinV1CollectorUrl, false));
+        if (zipkinV1JsonUrl != null) {
+            emitters.add(new ZipkinTraceEmitter(zipkinV1JsonUrl, SpanBytesEncoder.JSON_V1));
         }
-        if (zipkinV2CollectorUrl != null) {
-            emitters.add(new ZipkinTraceEmitter(zipkinV2CollectorUrl, true));
+        if (zipkinV1ThriftUrl != null) {
+            emitters.add(new ZipkinTraceEmitter(zipkinV1ThriftUrl, SpanBytesEncoder.THRIFT));
+        }
+        if (zipkinV2JsonUrl != null) {
+            emitters.add(new ZipkinTraceEmitter(zipkinV2JsonUrl, SpanBytesEncoder.JSON_V2));
+        }
+        if (zipkinV2Proto3Url != null) {
+            emitters.add(new ZipkinTraceEmitter(zipkinV2Proto3Url, SpanBytesEncoder.PROTO3));
         }
         if (emitters.size() == 0) {
             logger.error("No emitters specified.");

@@ -5,12 +5,20 @@ if [ -z "${TOPOLOGY_FILE}" ]; then TOPOLOGY_FILE=topologies/hipster-shop.json; f
 
 PARAMS="--jaegerCollectorUrl ${JAEGER_COLLECTOR_URL}"
 
-if [ ! -z "${ZIPKINV1_COLLECTOR_URL}" ]; then
-    PARAMS="$PARAMS --zipkinV1CollectorUrl ${ZIPKINV1_COLLECTOR_URL}"
+if [ ! -z "${ZIPKINV1_JSON_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV1JsonUrl ${ZIPKINV1_JSON_URL}"
 fi
 
-if [ ! -z "${ZIPKINV2_COLLECTOR_URL}" ]; then
-    PARAMS="$PARAMS --zipkinV2CollectorUrl ${ZIPKINV2_COLLECTOR_URL}"
+if [ ! -z "${ZIPKINV2_JSON_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV2JsonUrl ${ZIPKINV2_JSON_URL}"
+fi
+
+if [ ! -z "${ZIPKINV1_THRIFT_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV1ThriftUrl ${ZIPKINV1_THRIFT_URL}"
+fi
+
+if [ ! -z "${ZIPKINV2_PROTO3_URL}" ]; then
+    PARAMS="$PARAMS --zipkinV2Proto3Url ${ZIPKINV2_PROTO3_URL}"
 fi
 
 echo "using params: " $PARAMS
