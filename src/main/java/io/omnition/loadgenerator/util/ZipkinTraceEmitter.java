@@ -14,6 +14,8 @@ import io.opentracing.propagation.TextMapInjectAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.log4j.Logger;
+
+import zipkin2.codec.Encoding;
 import zipkin2.codec.SpanBytesEncoder;
 import zipkin2.reporter.AsyncReporter;
 import zipkin2.reporter.Reporter;
@@ -36,11 +38,11 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
     private final Map<String, BraveTracer> serviceNameToTracer = new HashMap<>();
 
     private String collectorURL;
-    private boolean useZipkinV2;
+    private SpanBytesEncoder spanBytesEncoder;
 
-    public ZipkinTraceEmitter(String collectorURL, boolean useZipkinV2) {
+    public ZipkinTraceEmitter(String collectorURL, SpanBytesEncoder spanBytesEncoder) {
         this.collectorURL = collectorURL;
-        this.useZipkinV2 = useZipkinV2;
+        this.spanBytesEncoder = spanBytesEncoder;
     }
 
     @Override
@@ -85,17 +87,25 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
     }
 
     private BraveTracer createBraveTracer(String collectorUrl, Service svc) {
+        Encoding encoding = Encoding.JSON;
         String queryPath = V2_API;
-        if (!useZipkinV2) {
-            queryPath = V1_API;
+        switch (this.spanBytesEncoder) {
+            case JSON_V1:
+                queryPath = V1_API;
+                break;
+            case THRIFT:
+                encoding = Encoding.THRIFT;
+                queryPath = V1_API;
+                break;
+            case JSON_V2: 
+                break;
+            case PROTO3:
+                encoding = Encoding.PROTO3;
+                break;
         }
-        Sender sender = OkHttpSender.create(collectorUrl + queryPath);
-        Reporter<zipkin2.Span> spanReporter;
-        if (!useZipkinV2) {
-            spanReporter = AsyncReporter.builder(sender).build(SpanBytesEncoder.JSON_V1);
-        } else {
-            spanReporter = AsyncReporter.create(sender);
-        }
+
+        Sender sender = OkHttpSender.newBuilder().encoding(encoding).endpoint(collectorUrl + queryPath).build();
+        Reporter<zipkin2.Span> spanReporter = AsyncReporter.builder(sender).build(this.spanBytesEncoder);
         Propagation.Factory propagationFactory = B3Propagation.FACTORY;
         Tracing.Builder braveTracingB = Tracing.newBuilder()
                 .localServiceName(svc.serviceName)
