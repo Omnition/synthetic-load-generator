@@ -14,9 +14,15 @@ make build
 
 ## Configuration
 
-Configuration is done by JSON file. The json file should describe a complete topology by describing various services, their routes, and the downstreamCalls that those routes make. `rootRoutes` indicate the root spans or ingress points into the topology, and can be configured with the number of traces per hour to send.
+Configuration is done by JSON file. The json file should describe a complete topology by describing various services,
+their routes, and the downstreamCalls that those routes make. `rootRoutes` indicate the root spans or ingress points
+ into the topology, and can be configured with the number of traces per hour to send.
 
-Different tags can also be added to each service or to each route. Tags added to a service will apply to all routes for that service, whereas tags for a route will be added for that route only. The tags for a route supersede tags set for a service. Services and routes can set tags probabilistically based on integer weights (default is 1). Additionally, service can inherit tags from their direct caller by specifying the keys that should be inherited, which can be useful for modeling region-locked flows.  
+Different tags can also be added to each service or to each route. Tags added to a service will apply to all routes for
+that service, whereas tags for a route will be added for that route only. The tags for a route supersede tags set for
+a service. Services and routes can set tags probabilistically based on integer weights (default is 1). Additionally,
+service can inherit tags from their direct caller by specifying the keys that should be inherited, which can be
+useful for modeling region-locked flows. TagGenerators can also be added to add many tags with many values.
 
 Simple Example JSON:
 ```json
@@ -27,7 +33,7 @@ Simple Example JSON:
         "serviceName" : "poke-mart",
         "instances" : [ "viridian-d847fdcf5-j6s2f", "pallet-79d8c8d6c8-9sbff" ],
         "tagSets" : [
-          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }},
+          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }, "tagGenerators": [{"name": "pokemon-id-", "numTags": 32, "numVals": 152}] },
           { "tags": { "generation" : "v2", "region" : "johto" }}
         ],
         "routes" : [

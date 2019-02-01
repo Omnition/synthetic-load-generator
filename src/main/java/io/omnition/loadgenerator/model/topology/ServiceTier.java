@@ -46,9 +46,11 @@ public class ServiceTier {
                         TagSet mergedSet = new TagSet();
                         mergedSet.tags = new HashMap<>(serviceSet.tags);
                         mergedSet.inherit = new ArrayList<>(serviceSet.inherit);
+                        mergedSet.tagGenerators = new ArrayList<>(serviceSet.tagGenerators);
 
                         mergedSet.tags.putAll(routeSet.tags);
                         mergedSet.inherit.addAll(routeSet.inherit);
+                        mergedSet.tagGenerators.addAll(routeSet.tagGenerators);
                         mergedSet.setWeight(routeSet.getWeight() * serviceSet.getWeight());
                         total += mergedSet.getWeight();
                         treeMap.put(total, mergedSet);

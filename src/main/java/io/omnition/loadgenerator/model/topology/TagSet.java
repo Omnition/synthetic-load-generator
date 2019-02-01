@@ -8,6 +8,7 @@ import java.util.Map;
 public class TagSet {
     private Integer weight;
     public Map<String, Object> tags = new HashMap<>();
+    public List<TagGenerator> tagGenerators = new ArrayList<>();
     public List<String> inherit = new ArrayList<>();
 
     public void setWeight(int weight) {

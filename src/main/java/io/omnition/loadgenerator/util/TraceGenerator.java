@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import io.omnition.loadgenerator.model.topology.ServiceRoute;
 import io.omnition.loadgenerator.model.topology.ServiceTier;
+import io.omnition.loadgenerator.model.topology.TagGenerator;
 import io.omnition.loadgenerator.model.topology.TagSet;
 import io.omnition.loadgenerator.model.topology.Topology;
 import io.omnition.loadgenerator.model.trace.KeyValue;
@@ -56,6 +57,9 @@ public class TraceGenerator {
         // Get additional tags for this route, and update with any inherited tags
         TagSet routeTags = serviceTier.getTagSet(routeName);
         HashMap<String, Object> tagsToSet = new HashMap<>(routeTags.tags);
+        for (TagGenerator tagGenerator : routeTags.tagGenerators) {
+            tagsToSet.putAll(tagGenerator.generateTags());
+        }
         if (parentTagSet != null && routeTags.inherit != null) {
             for (String inheritTagKey : routeTags.inherit) {
                 Object value = parentTagSet.tags.get(inheritTagKey);
