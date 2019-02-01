@@ -35,11 +35,11 @@ public class Span {
         return (int)code;
     }
 
-    public void setHttpUrl(String url) {
+    public void setHttpUrlTag(String url) {
         this.tags.add(KeyValue.ofStringType(SpanConventions.HTTP_URL_KEY, url));
     }
 
-    public void setHttpMethod(String method) {
+    public void setHttpMethodTag(String method) {
         this.tags.add(KeyValue.ofStringType(SpanConventions.HTTP_METHOD_KEY, method));
     }
 }
