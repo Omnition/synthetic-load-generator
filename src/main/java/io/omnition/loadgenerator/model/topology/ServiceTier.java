@@ -34,19 +34,25 @@ public class ServiceTier {
         TreeMap<Integer, TagSet> treeMap = new TreeMap<>();
         int total = 0;
         ServiceRoute route = routes.stream().filter((r) -> r.route.equals(routeName)).findFirst().get();
+
         // If we have to merge, merge, otherwise just set the service set.
         if (route.tagSets != null && route.tagSets.size() > 0) {
-            for (TagSet serviceSet : tagSets) {
-                for (TagSet routeSet : route.tagSets) {
-                    TagSet mergedSet = new TagSet();
-                    mergedSet.tags = new HashMap<>(serviceSet.tags);
-                    mergedSet.inherit = new ArrayList<>(serviceSet.inherit);
+            for (TagSet routeSet : route.tagSets) {
+                if (tagSets.isEmpty()) {
+                    total += routeSet.getWeight();
+                    treeMap.put(total, routeSet);
+                } else {
+                    for (TagSet serviceSet : tagSets) {
+                        TagSet mergedSet = new TagSet();
+                        mergedSet.tags = new HashMap<>(serviceSet.tags);
+                        mergedSet.inherit = new ArrayList<>(serviceSet.inherit);
 
-                    mergedSet.tags.putAll(routeSet.tags);
-                    mergedSet.inherit.addAll(routeSet.inherit);
-                    mergedSet.setWeight(routeSet.getWeight() * serviceSet.getWeight());
-                    total += mergedSet.getWeight();
-                    treeMap.put(total, mergedSet);
+                        mergedSet.tags.putAll(routeSet.tags);
+                        mergedSet.inherit.addAll(routeSet.inherit);
+                        mergedSet.setWeight(routeSet.getWeight() * serviceSet.getWeight());
+                        total += mergedSet.getWeight();
+                        treeMap.put(total, mergedSet);
+                    }
                 }
             }
         } else {

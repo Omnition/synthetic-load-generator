@@ -4,188 +4,189 @@
         {
           "serviceName" : "frontend",
           "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
-          "tags" : { "version" : "v125", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v125", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/product",
               "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 200 }
+              "maxLatencyMillis" : 200 
             },
             {
               "route" : "/alt_product_0",
               "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 200 }
+              "maxLatencyMillis" : 200 
             },
             {
               "route" : "/alt_product_1",
               "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 200 }
+              "maxLatencyMillis" : 200 
             },
             {
               "route" : "/alt_product_2",
               "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 200 }
+              "maxLatencyMillis" : 200 
             }
           ]
         },
         {
           "serviceName" : "productcatalogservice",
           "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
-          "tags" : { "version" : "v52", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v52", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/GetProducts",
               "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 100 }
+              "maxLatencyMillis" : 100 
             }
           ]
         },
         {
           "serviceName" : "recommendationservice",
           "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
-          "tags" : { "version" : "v234", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v234", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/GetRecommendations",
               "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 200 }
+              "maxLatencyMillis" : 200 
             }
           ]
         },
         {
           "serviceName" : "adservice",
           "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/AdRequest",
               "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 500 }
+              "maxLatencyMillis" : 500 
             },
             {
               "route" : "/Ad",
               "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4" },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 500 }
+              "maxLatencyMillis" : 500 
             }
           ]
         },
         {
           "serviceName" : "spanFiller0",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/0",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1 
             }
           ]
         },
         {
           "serviceName" : "spanFiller1",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/1",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1 
             }
           ]
         },
         {
           "serviceName" : "spanFiller2",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/2",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1 
             }
           ]
         },
         {
           "serviceName" : "spanFiller3",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/3",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1 
             }
           ]
         },
         {
           "serviceName" : "spanFiller4",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/4",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         },
         {
           "serviceName" : "spanFiller5",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/5",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         },
         {
           "serviceName" : "spanFiller6",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/6",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         },
         {
           "serviceName" : "spanFiller7",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/7",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         },
         {
           "serviceName" : "spanFiller8",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/8",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         },
         {
           "serviceName" : "spanFiller9",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tags" : { "version" : "v37", "region" : "us-east-1" },
+          "tagSets": [{"tags" : { "version" : "v37", "region" : "us-east-1" }}],
           "routes" : [
             {
               "route" : "/9",
               "downstreamCalls" : { },
-              "operationModel" : { "errorPercent" : 0, "errorCode" : 503, "maxLatencyMillis" : 1 }
+              "maxLatencyMillis" : 1
             }
           ]
         }

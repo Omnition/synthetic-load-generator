@@ -12,6 +12,81 @@ Invoke the Makefile:
 make build
 ```
 
+## Configuration
+
+Configuration is done by JSON file. The json file should describe a complete topology by describing various services, their routes, and the downstreamCalls that those routes make. `rootRoutes` indicate the root spans or ingress points into the topology, and can be configured with the number of traces per hour to send.
+
+Different tags can also be added to each service or to each route. Tags added to a service will apply to all routes for that service, whereas tags for a route will be added for that route only. The tags for a route supersede tags set for a service. Services and routes can set tags probabilistically based on integer weights (default is 1). Additionally, service can inherit tags from their direct caller by specifying the keys that should be inherited, which can be useful for modeling region-locked flows.  
+
+Simple Example JSON:
+```json
+{
+  "topology" : {
+    "services" : [
+      {
+        "serviceName" : "poke-mart",
+        "instances" : [ "viridian-d847fdcf5-j6s2f", "pallet-79d8c8d6c8-9sbff" ],
+        "tagSets" : [
+          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }},
+          { "tags": { "generation" : "v2", "region" : "johto" }}
+        ],
+        "routes" : [
+          {
+            "route" : "/product",
+            "downstreamCalls" : { "pokemon-center" : "/Recover", "brock" : "/GetRecommendations" },
+            "maxLatencyMillis": 200,
+            "tagSets": [
+              { "weight": 1, "tags": { "starter" : "charmander"}},
+              { "weight": 1, "tags": { "starter" : "squirtle"}},
+              { "weight": 1, "tags": { "starter" : "bulbasaur"}}
+            ]
+          }
+        ]
+      },
+      {
+        "serviceName" : "brock",
+        "instances" : [ "pewter-a347fe1ce-g4sl1"],
+        "tagSets" : [
+          { "tags": { "uselss": true }, "inherit": ["region", "starter"]}
+        ],
+        "routes" : [
+          {
+            "route" : "/GetRecommendations",
+            "downstreamCalls" : { },
+            "maxLatencyMillis": 1000,
+            "tagSets": [
+              { "tags": { "loves" : "jenny"}},
+              { "tags": { "loves" : "joy"}}
+            ]
+          }
+        ]
+      },
+      {
+        "serviceName" : "pokemon-center",
+        "instances" : [ "cerulean-23kn9aajk-lk12d"],
+        "tagSets" : [
+          { "tags": { "generation" : "v1", "region" : "kanto"}, "inherit": ["starter"] }
+        ],
+        "routes" : [
+          {
+            "route" : "/Recover",
+            "downstreamCalls" : { },
+            "maxLatencyMillis": 300
+          }
+        ]
+      }
+    ]
+  },
+  "rootRoutes" : [
+    {
+      "service" : "poke-mart",
+      "route" : "/product",
+      "tracesPerHour" : 18000
+    }
+  ]
+}
+```
+
 ## Building and running locally
 
 Building the JAR:

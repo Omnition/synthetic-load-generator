@@ -85,7 +85,7 @@ public class TraceGenerator {
         span.tags.addAll(spanTags);
 
         final AtomicLong maxEndTime = new AtomicLong(startTimeMicros);
-        if (tagsToSet.get(SpanConventions.IS_ERROR_KEY) != null) {
+        if (span.isErrorSpan()) {
             // inject root cause error and terminate trace there
             span.markRootCauseError();
         } else {
@@ -97,9 +97,11 @@ public class TraceGenerator {
                 Reference ref = new Reference(RefType.CHILD_OF, span.id, childSpan.id);
                 childSpan.refs.add(ref);
                 maxEndTime.set(Math.max(maxEndTime.get(), childSpan.endTimeMicros));
-                int childCode = childSpan.getHttpCodeOrDefault(200);
-                if (childCode != 200) {
-                    span.setHttpCode(childCode);
+                if (childSpan.isErrorSpan()) {
+                    Integer httpCode = childSpan.getHttpCode();
+                    if (httpCode != null) {
+                        span.setHttpCode(httpCode);
+                    }
                     span.markError();
                 }
             });
