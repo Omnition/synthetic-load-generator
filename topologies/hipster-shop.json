@@ -50,7 +50,10 @@
           {
             "route" : "/GetProducts",
             "downstreamCalls" : { },
-            "maxLatencyMillis" : 100
+            "maxLatencyMillis" : 100,
+            "tagSets": [
+              {"inherit": ["starter"]}
+            ]
           },
           {
             "route" : "/SearchProducts",
