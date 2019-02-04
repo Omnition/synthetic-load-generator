@@ -20,9 +20,11 @@ their routes, and the downstreamCalls that those routes make. `rootRoutes` indic
 
 Different tags can also be added to each service or to each route. Tags added to a service will apply to all routes for
 that service, whereas tags for a route will be added for that route only. The tags for a route supersede tags set for
-a service. Services and routes can set tags probabilistically based on integer weights (default is 1). Additionally,
-service can inherit tags from their direct caller by specifying the keys that should be inherited, which can be
-useful for modeling region-locked flows. TagGenerators can also be added to add many tags with many values.
+a service. Services and routes can set tags probabilistically based on integer weights (default is 1) where the
+probability of selection is <weight of specific tagset> divided by <sum of all weights>. Additionally, services/routes
+can inherit tags from their direct caller by specifying the keys that should be inherited, which can be
+useful for modeling region-locked flows. TagGenerators can also be added to add many tags with many values of varying
+length.
 
 Simple Example JSON:
 ```json
@@ -33,7 +35,7 @@ Simple Example JSON:
         "serviceName" : "poke-mart",
         "instances" : [ "viridian-d847fdcf5-j6s2f", "pallet-79d8c8d6c8-9sbff" ],
         "tagSets" : [
-          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }, "tagGenerators": [{"name": "pokemon-id-", "numTags": 32, "numVals": 152}] },
+          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }, "tagGenerators": [{"numTags": 32, "numVals": 152, "valLength": 64}] },
           { "tags": { "generation" : "v2", "region" : "johto" }}
         ],
         "routes" : [
