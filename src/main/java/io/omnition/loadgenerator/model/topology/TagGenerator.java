@@ -9,7 +9,7 @@ import java.util.Random;
 public class TagGenerator {
 
     private Random rand = new Random();
-    private RandomTagNameGenerator tagGen = new RandomTagNameGenerator();
+    private TagNameGenerator tagGen = new TagNameGenerator();
 
     public int valLength = 10;
     public int numTags = 0;
