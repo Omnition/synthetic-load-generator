@@ -15,7 +15,7 @@
             "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest" },
             "maxLatencyMillis": 200,
             "tagSets": [
-              { "weight": 1, "tags": { "starter" : "charmander"}, "tagGenerators":  [{"numTags":  50, "numVals":  3, "valLength": 5}]},
+              { "weight": 1, "tags": { "starter" : "charmander"}, "tagGenerators":  [{"numTags":  50, "numVals":  3000, "valLength": 16}]},
               { "weight": 1, "tags": { "starter" : "squirtle"}},
               { "weight": 1, "tags": { "starter" : "bulbasaur"}}
             ]
