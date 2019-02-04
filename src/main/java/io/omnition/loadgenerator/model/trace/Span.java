@@ -23,23 +23,28 @@ public class Span {
         this.tags.add(KeyValue.ofBooleanType(SpanConventions.IS_ROOT_CAUSE_ERROR_KEY, true));
     }
 
+    public boolean isErrorSpan() {
+        return tags.stream()
+            .anyMatch(kv -> (kv.key.equalsIgnoreCase(SpanConventions.HTTP_STATUS_CODE_KEY) && kv.valueLong != 200)
+                || (kv.key.equalsIgnoreCase(SpanConventions.IS_ERROR_KEY) && kv.valueBool));
+    }
+
     public void setHttpCode(int code) {
         this.tags.add(KeyValue.ofLongType(SpanConventions.HTTP_STATUS_CODE_KEY, (long)code));
     }
 
-    public int getHttpCodeOrDefault(int defaultCode) {
-        long code = tags.stream()
-                .filter(kv -> kv.key.equalsIgnoreCase(SpanConventions.HTTP_STATUS_CODE_KEY))
-                .map(kv -> kv.valueLong)
-                .findFirst().orElse((long)defaultCode);
-        return (int)code;
+    public Integer getHttpCode() {
+        return tags.stream()
+            .filter(kv -> kv.key.equalsIgnoreCase(SpanConventions.HTTP_STATUS_CODE_KEY))
+            .map(kv -> kv.valueLong.intValue())
+            .findFirst().orElse(null);
     }
 
-    public void setHttpUrl(String url) {
+    public void setHttpUrlTag(String url) {
         this.tags.add(KeyValue.ofStringType(SpanConventions.HTTP_URL_KEY, url));
     }
 
-    public void setHttpMethod(String method) {
+    public void setHttpMethodTag(String method) {
         this.tags.add(KeyValue.ofStringType(SpanConventions.HTTP_METHOD_KEY, method));
     }
 }
