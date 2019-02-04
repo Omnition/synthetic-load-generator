@@ -20,7 +20,7 @@ public class TagGenerator {
         for (int genIndex = 0; genIndex < numTags; genIndex++) {
             String val;
             val = RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals)));
-            retVal.put(tagGen.random(rand), val);
+            retVal.put(tagGen.getForIndex(genIndex), val);
         }
 
         return retVal;
