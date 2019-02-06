@@ -47,10 +47,18 @@ public class ServiceTier {
                         mergedSet.tags = new HashMap<>(serviceSet.tags);
                         mergedSet.inherit = new ArrayList<>(serviceSet.inherit);
                         mergedSet.tagGenerators = new ArrayList<>(serviceSet.tagGenerators);
+                        mergedSet.maxLatency = serviceSet.maxLatency;
+                        mergedSet.minLatency = serviceSet.minLatency;
 
                         mergedSet.tags.putAll(routeSet.tags);
                         mergedSet.inherit.addAll(routeSet.inherit);
                         mergedSet.tagGenerators.addAll(routeSet.tagGenerators);
+                        if (routeSet.maxLatency != null) {
+                            mergedSet.maxLatency = routeSet.maxLatency;
+                        }
+                        if (routeSet.minLatency != null) {
+                            mergedSet.minLatency = routeSet.minLatency;
+                        }
                         mergedSet.setWeight(routeSet.getWeight() * serviceSet.getWeight());
                         total += mergedSet.getWeight();
                         treeMap.put(total, mergedSet);

@@ -95,7 +95,7 @@ public class TraceGenerator {
         } else {
             // no error, make downstream calls
             route.downstreamCalls.forEach((s, r) -> {
-                long childStartTimeMicros = startTimeMicros + TimeUnit.MILLISECONDS.toMicros(random.nextInt(route.maxLatencyMillis));
+                long childStartTimeMicros = startTimeMicros + TimeUnit.MILLISECONDS.toMicros(routeTags.randomLatency());
                 ServiceTier childSvc = this.topology.getServiceTier(s);
                 Span childSpan = createSpanForServiceRouteCall(routeTags, childSvc, r, childStartTimeMicros);
                 Reference ref = new Reference(RefType.CHILD_OF, span.id, childSpan.id);
@@ -110,7 +110,7 @@ public class TraceGenerator {
                 }
             });
         }
-        long ownDuration = TimeUnit.MILLISECONDS.toMicros((long)this.random.nextInt(route.maxLatencyMillis));
+        long ownDuration = TimeUnit.MILLISECONDS.toMicros(routeTags.randomLatency());
         span.endTimeMicros = maxEndTime.get() + ownDuration;
         trace.addSpan(span);
         return span;
