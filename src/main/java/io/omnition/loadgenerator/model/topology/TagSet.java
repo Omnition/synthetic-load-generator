@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class TagSet {
+    private static Random random = new Random();
+
     private Integer weight;
+
     public Map<String, Object> tags = new HashMap<>();
     public List<TagGenerator> tagGenerators = new ArrayList<>();
     public List<String> inherit = new ArrayList<>();
+    public Integer maxLatency;
+    public Integer minLatency;
 
     public void setWeight(int weight) {
         if (weight <= 0) {
@@ -23,5 +29,16 @@ public class TagSet {
             return 1;
         }
         return weight;
+    }
+
+    public int randomLatency() {
+        if (maxLatency == null) {
+            throw new IllegalArgumentException("No max latency set");
+        }
+        int min = 0;
+        if (minLatency != null) {
+            min = minLatency;
+        }
+        return random.nextInt(maxLatency - min) + min;
     }
 }
