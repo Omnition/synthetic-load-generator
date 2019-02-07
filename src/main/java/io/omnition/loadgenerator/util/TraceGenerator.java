@@ -40,7 +40,7 @@ public class TraceGenerator {
         this.topology = topology;
     }
 
-    private Span createSpanForServiceRouteCall(TagSet parentTagSet, ServiceTier serviceTier, String routeName, long startTimeMicros) {
+    private Span createSpanForServiceRouteCall(Map<String, Object> parentTags, ServiceTier serviceTier, String routeName, long startTimeMicros) {
         String instanceName = serviceTier.instances.get(
                 random.nextInt(serviceTier.instances.size()));
         ServiceRoute route = serviceTier.getRoute(routeName);
@@ -61,9 +61,9 @@ public class TraceGenerator {
         for (TagGenerator tagGenerator : routeTags.tagGenerators) {
             tagsToSet.putAll(tagGenerator.generateTags());
         }
-        if (parentTagSet != null && routeTags.inherit != null) {
+        if (parentTags != null && routeTags.inherit != null) {
             for (String inheritTagKey : routeTags.inherit) {
-                Object value = parentTagSet.tags.get(inheritTagKey);
+                Object value = parentTags.get(inheritTagKey);
                 if (value != null) {
                     tagsToSet.put(inheritTagKey, value);
                 }
@@ -86,7 +86,7 @@ public class TraceGenerator {
             route.downstreamCalls.forEach((s, r) -> {
                 long childStartTimeMicros = startTimeMicros + TimeUnit.MILLISECONDS.toMicros(routeTags.randomLatency());
                 ServiceTier childSvc = this.topology.getServiceTier(s);
-                Span childSpan = createSpanForServiceRouteCall(routeTags, childSvc, r, childStartTimeMicros);
+                Span childSpan = createSpanForServiceRouteCall(tagsToSet, childSvc, r, childStartTimeMicros);
                 Reference ref = new Reference(RefType.CHILD_OF, span.id, childSpan.id);
                 childSpan.refs.add(ref);
                 maxEndTime.set(Math.max(maxEndTime.get(), childSpan.endTimeMicros));
