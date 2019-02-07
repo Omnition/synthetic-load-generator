@@ -8,8 +8,8 @@
           {
             "tags" : {
               "version" : "v127",
-              "region" : ["us-west-1", "us-east1"],
-              "incident": "none",
+              "region" : ["us-west-1", "us-east-1"],
+              "incident": ["dev_errors", "region_latency", "tenant_level_errors", "version_errors"],
               "environment": ["prod", "stag", "dev"],
               "tenant-level": ["bronze", "silver", "gold"]
             },
@@ -236,27 +236,27 @@
     {
       "service" : "frontend",
       "route" : "/product",
-      "tracesPerHour" : 2880
+      "tracesPerHour" : 4880
     },
     {
       "service" : "frontend",
       "route" : "/cart",
-      "tracesPerHour" : 14400
+      "tracesPerHour" : 24400
     },
     {
       "service" : "frontend",
       "route" : "/shipping",
-      "tracesPerHour" : 480
+      "tracesPerHour" : 880
     },
     {
       "service" : "frontend",
       "route" : "/currency",
-      "tracesPerHour" : 200
+      "tracesPerHour" : 400
     },
     {
       "service" : "frontend",
       "route" : "/checkout",
-      "tracesPerHour" : 480
+      "tracesPerHour" : 880
     }
   ]
 }

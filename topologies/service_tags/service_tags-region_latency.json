@@ -197,12 +197,12 @@
     {
       "service" : "frontend",
       "route" : "/cart",
-      "tracesPerHour" : 1440
+      "tracesPerHour" : 6440
     },
     {
       "service" : "frontend",
       "route" : "/checkout",
-      "tracesPerHour" : 480
+      "tracesPerHour" : 1480
     }
   ]
 }

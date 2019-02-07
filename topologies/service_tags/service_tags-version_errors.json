@@ -8,7 +8,7 @@
           {
             "tags" : {
               "version" : "v127",
-              "region" : ["us-west-1", "us-east1"],
+              "region" : ["us-west-1", "us-east-1"],
               "environment": "prod",
               "incident": "version_errors",
               "tenant-level": ["bronze", "silver", "gold"]
