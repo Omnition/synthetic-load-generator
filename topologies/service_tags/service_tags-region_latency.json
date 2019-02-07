@@ -70,7 +70,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v5", "region" : "us-east-1"},
-            "inherit":  ["region", "environment", "tenant-level", "incident"],
+            "inherit":  ["environment", "tenant-level", "incident"],
             "minLatency": 1000,
             "maxLatency":  5000
           }
