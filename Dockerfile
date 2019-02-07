@@ -4,7 +4,7 @@ FROM openjdk:8-jre-alpine
 # Define working directory.
 RUN mkdir -p /opt/omnition/topologies
 COPY target/SyntheticLoadGenerator-1.0-SNAPSHOT-jar-with-dependencies.jar /opt/omnition/synthetic-load-generator.jar
-COPY topologies/* /opt/omnition/topologies/
+COPY topologies/. /opt/omnition/topologies/
 COPY start.sh /opt/omnition/
 RUN chmod +x /opt/omnition/start.sh
 WORKDIR /opt/omnition/
