@@ -33,11 +33,14 @@ public class TagSet {
 
     public int randomLatency() {
         if (maxLatency == null) {
-            throw new IllegalArgumentException("No max latency set");
+            throw new IllegalArgumentException("No maxLatency set");
         }
         int min = 0;
         if (minLatency != null) {
             min = minLatency;
+        }
+        if (maxLatency < min) {
+            throw new IllegalArgumentException("maxLatency must be greater than minLatency");
         }
         return random.nextInt(maxLatency - min) + min;
     }

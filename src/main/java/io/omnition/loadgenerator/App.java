@@ -2,7 +2,9 @@ package io.omnition.loadgenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,22 +78,17 @@ public class App {
 
     public void init() throws Exception {
         File f = new File(this.topologyFile);
-        if(!f.exists() || f.isDirectory()) {
+        if(!f.exists()) {
             logger.error("Invalid topology file specified: " + this.topologyFile);
             throw new FileNotFoundException(this.topologyFile);
         }
 
-        String json = new String(Files.readAllBytes(Paths.get(this.topologyFile)), "UTF-8");
-        Gson gson = new Gson();
-        LoadGeneratorParams params = gson.fromJson(json, LoadGeneratorParams.class);
-        logger.info("Params: " + gson.toJson(params));
-        List<ITraceEmitter> emitters = getTraceEmitters();
-        for (ITraceEmitter emitter : emitters) {
-            for (RootServiceRoute route : params.rootRoutes) {
-                this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
-                        params.topology, route.service, route.route,
-                        route.tracesPerHour, emitter));
+        if (f.isDirectory()) {
+            for (File file : f.listFiles()) {
+                initForPath(Paths.get(file.getPath()));
             }
+        } else {
+            initForPath(Paths.get(this.topologyFile));
         }
     }
 
@@ -110,6 +107,21 @@ public class App {
             gen.awaitTermination();
         }
         latch.countDown();
+    }
+
+    private void initForPath(Path path) throws IOException {
+        String json = new String(Files.readAllBytes(path), "UTF-8");
+        Gson gson = new Gson();
+        LoadGeneratorParams params = gson.fromJson(json, LoadGeneratorParams.class);
+        logger.info("Params: " + gson.toJson(params));
+        List<ITraceEmitter> emitters = getTraceEmitters();
+        for (ITraceEmitter emitter : emitters) {
+            for (RootServiceRoute route : params.rootRoutes) {
+                this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
+                        params.topology, route.service, route.route,
+                        route.tracesPerHour, emitter));
+            }
+        }
     }
 
     private List<ITraceEmitter> getTraceEmitters() {

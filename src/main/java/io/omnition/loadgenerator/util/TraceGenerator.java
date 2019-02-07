@@ -3,6 +3,7 @@ package io.omnition.loadgenerator.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -71,19 +72,7 @@ public class TraceGenerator {
 
         // Set the additional tags on the span
         List<KeyValue> spanTags = tagsToSet.entrySet().stream()
-            .map(t -> {
-                Object val = t.getValue();
-                if (val instanceof String) {
-                    return KeyValue.ofStringType(t.getKey(), (String) val);
-                }
-                if (val instanceof Double) {
-                    return KeyValue.ofLongType(t.getKey(), ((Double) val).longValue());
-                }
-                if (val instanceof Boolean) {
-                    return KeyValue.ofBooleanType(t.getKey(), (Boolean) val);
-                }
-                return null;
-            })
+            .map(t -> entryToKeyValue(t.getKey(), t.getValue()))
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         span.tags.addAll(spanTags);
@@ -114,5 +103,21 @@ public class TraceGenerator {
         span.endTimeMicros = maxEndTime.get() + ownDuration;
         trace.addSpan(span);
         return span;
+    }
+
+    private KeyValue entryToKeyValue(String key, Object val) {
+        if (val instanceof String) {
+            return KeyValue.ofStringType(key, (String) val);
+        }
+        if (val instanceof Double) {
+            return KeyValue.ofLongType(key, ((Double) val).longValue());
+        }
+        if (val instanceof Boolean) {
+            return KeyValue.ofBooleanType(key, (Boolean) val);
+        }
+        if (val instanceof List) {
+            return entryToKeyValue(key, ((List) val).get(random.nextInt(((List) val).size())));
+        }
+        return null;
     }
 }
