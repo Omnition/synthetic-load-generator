@@ -9,6 +9,7 @@
             "tags" : {
               "version" : "v127",
               "region" : ["us-west-1", "us-east1"],
+              "incident": "none",
               "environment": ["prod", "stag", "dev"],
               "tenant-level": ["bronze", "silver", "gold"]
             },

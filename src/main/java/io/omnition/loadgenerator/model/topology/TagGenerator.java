@@ -21,12 +21,14 @@ public class TagGenerator {
         if (numTags != 0 && tagName != null) {
             throw new IllegalArgumentException("numTags and tagName cannot both be set");
         }
-        for (int genIndex = 0; genIndex < numTags; genIndex++) {
-            String val;
-            val = RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals)));
-            retVal.put(tagGen.getForIndex(genIndex), val);
+        if (tagName == null) {
+            for (int genIndex = 0; genIndex < numTags; genIndex++) {
+                String val;
+                val = RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals)));
+                retVal.put(tagGen.getForIndex(genIndex), val);
+            }
         }
-        if (tagName != null) {
+        else {
             retVal.put(tagName, RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals))));
         }
 

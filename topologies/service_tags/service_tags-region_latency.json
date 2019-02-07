@@ -10,6 +10,7 @@
               "version" : "v127",
               "region" : "us-west-1",
               "environment": "prod",
+              "incident":  "region_latency",
               "tenant-level": ["bronze", "silver", "gold"]
             },
             "maxLatency": 100
@@ -68,7 +69,7 @@
         "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v5", "region" : "us-east-1", "incident":  "xregion-high-latency"},
+            "tags" : { "version" : "v5", "region" : "us-east-1"},
             "inherit":  ["environment", "tenant-level"],
             "minLatency": 1000,
             "maxLatency":  5000

@@ -8,8 +8,9 @@
           {
             "tags" : {
               "version" : "v127",
-              "region" : ["us-west-1", "us-east1"],
+              "region" : "us-west-1",
               "environment": "prod",
+              "incident":  "tenant_level_errors",
               "tenant-level": "gold"
             },
             "maxLatency": 100
@@ -33,7 +34,7 @@
           {
             "weight": 1,
             "tags": { "version" : "v52", "tenant-level":  "gold", "error" : true, "http.status_code":  503},
-            "inherit":  ["environment", "region"]
+            "inherit":  ["environment", "region", "incident"]
           }
         ],
         "routes" : [
@@ -56,7 +57,7 @@
           {
             "weight": 1,
             "tags" : { "version" : "v234"},
-            "inherit": ["region", "environment", "tenant-level"],
+            "inherit":  ["region", "environment", "tenant-level", "incident"],
             "maxLatency":  200
           }
         ],
@@ -74,7 +75,7 @@
           {
             "tags" : { "version" : "v5"},
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit":  ["region", "environment", "tenant-level", "incident"]
           }
         ],
         "routes" : [
@@ -91,7 +92,7 @@
         "tagSets" : [
           {
             "tags": { "version": "v37" },
-            "inherit": ["region", "environment", "tenant-level"],
+            "inherit":  ["region", "environment", "tenant-level", "incident"],
             "maxLatency": 500
           }
         ],

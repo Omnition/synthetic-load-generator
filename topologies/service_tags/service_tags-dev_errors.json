@@ -10,6 +10,7 @@
               "version" : "v127",
               "region" : ["us-west-1", "us-east1"],
               "environment": "dev",
+              "incident": "dev_errors",
               "tenant-level": ["bronze", "silver", "gold"]
             },
             "maxLatency": 100
@@ -30,7 +31,7 @@
           {
             "tags" : { "version" : "v5"},
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit":  ["region", "environment", "tenant-level", "incident"]
           }
         ],
         "routes" : [
@@ -48,7 +49,7 @@
           {
             "maxLatency": 500,
             "tags" : { "version" : "v37", "region" : "us-west-1" },
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit":  ["region", "environment", "tenant-level", "incident"]
           }
         ],
         "routes" : [
@@ -64,7 +65,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v177", "error":  true, "http.status_code":  500},
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit":  ["region", "environment", "tenant-level", "incident"]
           }
         ],
         "routes" : [
@@ -86,7 +87,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v127"},
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit":  ["region", "environment", "tenant-level", "incident"]
           }
         ],
         "routes" : [
@@ -113,7 +114,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v17"},
-            "inherit":  ["region", "environment", "tenant-level"],
+            "inherit":  ["region", "environment", "tenant-level", "incident"],
             "maxLatency":  500
           }
         ],
@@ -135,7 +136,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v27"},
-            "inherit":  ["region", "environment", "tenant-level"],
+            "inherit":  ["region", "environment", "tenant-level", "incident"],
             "maxLatency": 100
           }
         ],
