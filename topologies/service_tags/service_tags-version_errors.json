@@ -8,7 +8,7 @@
           {
             "tags" : {
               "version" : "v127",
-              "region" : ["us-west-1", "us-east1"],
+              "region" : ["us-west-1", "us-east-1"],
               "environment": "prod",
               "incident": "version_errors",
               "tenant-level": ["bronze", "silver", "gold"]
@@ -51,7 +51,7 @@
         "tagSets" : [
           {
             "weight": 1,
-            "tags" : { "version" : "v235", "error" : true, "http.status_code":  503, "incident": "bad-version"},
+            "tags" : { "version" : "v235", "error" : true, "http.status_code":  503, "incident": "version_errors"},
             "inherit": ["region", "environment", "tenant-level"],
             "maxLatency":  200
           }

@@ -70,7 +70,7 @@
         "tagSets": [
           {
             "tags" : { "version" : "v5", "region" : "us-east-1"},
-            "inherit":  ["region", "environment", "tenant-level", "incident"],
+            "inherit":  ["environment", "tenant-level", "incident"],
             "minLatency": 1000,
             "maxLatency":  5000
           }
@@ -197,12 +197,12 @@
     {
       "service" : "frontend",
       "route" : "/cart",
-      "tracesPerHour" : 1440
+      "tracesPerHour" : 6440
     },
     {
       "service" : "frontend",
       "route" : "/checkout",
-      "tracesPerHour" : 480
+      "tracesPerHour" : 1480
     }
   ]
 }
