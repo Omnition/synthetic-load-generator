@@ -1,0 +1,199 @@
+{
+    "topology" : {
+      "services" : [
+        {
+          "serviceName" : "frontend",
+          "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency": 200}],
+          "routes" : [
+            {
+              "route" : "/product",
+              "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            },
+            {
+              "route" : "/alt_product_0",
+              "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            },
+            {
+              "route" : "/alt_product_1",
+              "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            },
+            {
+              "route" : "/alt_product_2",
+              "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            }
+          ]
+        },
+        {
+          "serviceName" : "productcatalogservice",
+          "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  100}],
+          "routes" : [
+            {
+              "route" : "/GetProducts",
+              "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            }
+          ]
+        },
+        {
+          "serviceName" : "recommendationservice",
+          "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency": 100}],
+          "routes" : [
+            {
+              "route" : "/GetRecommendations",
+              "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4", "spanFiller5" : "/5", "spanFiller6" : "/6", "spanFiller7" : "/7", "spanFiller8" : "/8", "spanFiller9" : "/9" }
+            }
+          ]
+        },
+        {
+          "serviceName" : "adservice",
+          "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency" : 500 }],
+          "routes" : [
+            {
+              "route" : "/AdRequest",
+              "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4" }
+            },
+            {
+              "route" : "/Ad",
+              "downstreamCalls" : { "spanFiller0" : "/0", "spanFiller1" : "/1", "spanFiller2" : "/2", "spanFiller3" : "/3", "spanFiller4" : "/4" }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller0",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/0",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller1",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/1",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller2",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/2",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller3",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/3",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller4",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/4",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller5",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/5",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller6",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/6",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller7",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/7",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller8",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/8",
+              "downstreamCalls" : { }
+            }
+          ]
+        },
+        {
+          "serviceName" : "spanFiller9",
+          "instances" : [ "spanfiller-6b654dbf57-00000" ],
+          "tagSets": [{"tags" : { "fix-tag-name-00" : "fix-tag-value-00", "fix-tag-name-01" : "fix-tag-value-01", "fix-tag-name-02" : "fix-tag-value-02", "fix-tag-name-03" : "fix-tag-value-03", "fix-tag-name-04" : "fix-tag-value-04", "fix-tag-name-05" : "fix-tag-value-05", "fix-tag-name-06" : "fix-tag-value-06", "fix-tag-name-07" : "fix-tag-value-07", "fix-tag-name-08" : "fix-tag-value-08", "fix-tag-name-09" : "fix-tag-value-09", "fix-tag-name-10" : "fix-tag-value-10", "fix-tag-name-11" : "fix-tag-value-11", "fix-tag-name-12" : "fix-tag-value-12", "fix-tag-name-13" : "fix-tag-value-13", "fix-tag-name-14" : "fix-tag-value-14", "fix-tag-name-15" : "fix-tag-value-15", "fix-tag-name-16" : "fix-tag-value-16", "fix-tag-name-17" : "fix-tag-value-17", "fix-tag-name-18" : "fix-tag-value-18", "fix-tag-name-19" : "fix-tag-value-19" }, "maxLatency":  1}],
+          "routes" : [
+            {
+              "route" : "/9",
+              "downstreamCalls" : { }
+            }
+          ]
+        }
+      ]
+    },
+    "rootRoutes" : [
+      {
+        "service" : "frontend",
+        "route" : "/product",
+        "tracesPerHour" : 1800000
+      },
+      {
+        "service" : "frontend",
+        "route" : "/alt_product_0",
+        "tracesPerHour" : 1800000
+      },
+      {
+        "service" : "frontend",
+        "route" : "/alt_product_1",
+        "tracesPerHour" : 1800000
+      },
+      {
+        "service" : "frontend",
+        "route" : "/alt_product_2",
+        "tracesPerHour" : 1800000
+      }
+    ]
+  }
+  
