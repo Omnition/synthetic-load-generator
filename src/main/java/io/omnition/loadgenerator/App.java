@@ -31,6 +31,9 @@ public class App {
     @Parameter(names = "--paramsFile", description = "Name of the file containing the topology params", required = true)
     private String topologyFile;
 
+    @Parameter(names = "--rateFactor", description = "A rate factor to adjust the rate of traces from topology file", required = false)
+    private Float rateFactor = 1.0f;
+
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
 
@@ -85,10 +88,10 @@ public class App {
 
         if (f.isDirectory()) {
             for (File file : f.listFiles()) {
-                initForPath(Paths.get(file.getPath()));
+                initForPath(Paths.get(file.getPath()), this.rateFactor);
             }
         } else {
-            initForPath(Paths.get(this.topologyFile));
+            initForPath(Paths.get(this.topologyFile), this.rateFactor);
         }
     }
 
@@ -109,7 +112,7 @@ public class App {
         latch.countDown();
     }
 
-    private void initForPath(Path path) throws IOException {
+    private void initForPath(Path path, Float rateFactor) throws IOException {
         String json = new String(Files.readAllBytes(path), "UTF-8");
         Gson gson = new Gson();
         LoadGeneratorParams params = gson.fromJson(json, LoadGeneratorParams.class);
@@ -119,7 +122,7 @@ public class App {
             for (RootServiceRoute route : params.rootRoutes) {
                 this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
                         params.topology, route.service, route.route,
-                        route.tracesPerHour, emitter));
+                        (int)(route.tracesPerHour * rateFactor), emitter));
             }
         }
     }

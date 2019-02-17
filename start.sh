@@ -2,6 +2,7 @@
 
 if [ -z "${JAEGER_COLLECTOR_URL}" ]; then JAEGER_COLLECTOR_URL=http://jaeger-collector:14268; fi
 if [ -z "${TOPOLOGY_FILE}" ]; then TOPOLOGY_FILE=./topologies/hipster-shop.json; fi
+if [ -z "${RATE_FACTOR}" ]; then RATE_FACTOR=1.0; fi
 
 if [ ! -z "${ZIPKINV1_JSON_URL}" ]; then
     PARAMS="$PARAMS --zipkinV1JsonUrl ${ZIPKINV1_JSON_URL}"
@@ -27,5 +28,5 @@ echo "using params: " ${PARAMS}
 
 java -jar synthetic-load-generator.jar \
     --paramsFile ${TOPOLOGY_FILE} \
+    --rateFactor ${RATE_FACTOR} \
     $PARAMS
-
