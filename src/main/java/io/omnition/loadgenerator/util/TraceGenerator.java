@@ -69,6 +69,7 @@ public class TraceGenerator {
                 }
             }
         }
+        tagsToSet.put("instance", service.instanceName);
 
         // Set the additional tags on the span
         List<KeyValue> spanTags = tagsToSet.entrySet().stream()
