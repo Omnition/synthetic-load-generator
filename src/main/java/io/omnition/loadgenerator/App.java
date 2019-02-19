@@ -37,6 +37,12 @@ public class App {
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
 
+    @Parameter(names = "--flushIntervalMillis", description = "How often the jaeger emitter will flush traces", required = false)
+    private long flushIntervalMillis = TimeUnit.SECONDS.toMillis(5);
+
+    @Parameter(names = "--maxQueueSize", description = "Maximum queue size used by the jaeger emitter", required = false)
+    private int maxQueueSize = 100000;
+
     @Parameter(names = "--zipkinV1JsonUrl", description = "URL of the zipkinV1 json collector", required = false)
     private String zipkinV1JsonUrl = null;
 
@@ -48,9 +54,6 @@ public class App {
 
     @Parameter(names = "--zipkinV2Proto3Url", description = "URL of the zipkinV2 proto3 collector", required = false)
     private String zipkinV2Proto3Url = null;
-
-    @Parameter(names = "--flushIntervalMillis", description = "How often to flush traces", required = false)
-    private long flushIntervalMillis = TimeUnit.SECONDS.toMillis(5);
 
     @Parameter(names = { "--help", "-h" }, help = true)
     private boolean help;
@@ -130,7 +133,7 @@ public class App {
     private List<ITraceEmitter> getTraceEmitters() {
         List<ITraceEmitter> emitters = new ArrayList<>(3);
         if (jaegerCollectorUrl != null) {
-            emitters.add(new JaegerTraceEmitter(jaegerCollectorUrl, (int) flushIntervalMillis));
+            emitters.add(new JaegerTraceEmitter(jaegerCollectorUrl, (int) flushIntervalMillis, maxQueueSize));
         }
         if (zipkinV1JsonUrl != null) {
             emitters.add(new ZipkinTraceEmitter(zipkinV1JsonUrl, SpanBytesEncoder.JSON_V1));

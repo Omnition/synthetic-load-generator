@@ -31,10 +31,12 @@ public class JaegerTraceEmitter implements ITraceEmitter {
     private final Map<String, Tracer> serviceNameToTracer = new HashMap<>();
     private final String collectorUrl;
     private final int flushIntervalMillis;
+    private final int maxQueueSize;
 
-    public JaegerTraceEmitter(String collectorUrl, int flushIntervalMillis) {
+    public JaegerTraceEmitter(String collectorUrl, int flushIntervalMillis, int maxQueueSize) {
         this.collectorUrl = collectorUrl;
         this.flushIntervalMillis = flushIntervalMillis;
+        this.maxQueueSize = maxQueueSize;
     }
 
     public void close() {
@@ -85,13 +87,13 @@ public class JaegerTraceEmitter implements ITraceEmitter {
 
     private Tracer getTracer(Service service) {
         return this.serviceNameToTracer.computeIfAbsent(service.serviceName,
-                s -> createJaegerTracer(collectorUrl, service, flushIntervalMillis));
+                s -> createJaegerTracer(collectorUrl, service, flushIntervalMillis, maxQueueSize));
     }
 
-    private static Tracer createJaegerTracer(String collectorUrl, Service svc, int flushIntervalMillis) {
+    private static Tracer createJaegerTracer(String collectorUrl, Service svc, int flushIntervalMillis, int maxQueueSize) {
         HttpSender sender = new HttpSender.Builder(collectorUrl + "/api/traces").build();
         Reporter reporter = new RemoteReporter.Builder().withSender(sender)
-                .withMaxQueueSize(100000)
+                .withMaxQueueSize(maxQueueSize)
                 .withFlushInterval(flushIntervalMillis)
                 .build();
         Builder bld = new Builder(svc.serviceName).withReporter(reporter)
