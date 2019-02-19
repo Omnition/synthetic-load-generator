@@ -8,8 +8,8 @@
           {
             "tags" : {
               "version" : "v127",
-              "region" : ["us-west-1", "us-east-1"],
-              "incident": ["dev_errors", "region_latency", "tenant_level_errors", "version_errors", "instance_errors"],
+              "region" : ["us-west-1"],
+              "incident": ["instance_errors"],
               "environment": ["prod", "stag", "dev"],
               "tenant-level": ["bronze", "silver", "gold"]
             },
@@ -18,68 +18,14 @@
         ],
         "routes" : [
           {
-            "route" : "/product",
-            "downstreamCalls" : { "productcatalogservice" : "/GetProducts", "recommendationservice" : "/GetRecommendations", "adservice" : "/AdRequest" }
-          },
-          {
-            "route" : "/cart",
-            "downstreamCalls" : { "cartservice" : "/GetCart", "recommendationservice" : "/GetRecommendations" }
-          },
-          {
             "route" : "/checkout",
             "downstreamCalls" : { "checkoutservice" : "/PlaceOrder" },
             "tagSets" : [{"maxLatency": 800}]
           },
           {
-            "route" : "/shipping",
-            "downstreamCalls" : { "shippingservice" : "/GetQuote" },
-            "tagSets" : [{"maxLatency": 50}]
-          },
-          {
             "route" : "/currency",
             "downstreamCalls" : { "currencyservice" : "/GetConversion" },
             "tagSets" : [{"maxLatency": 50}]
-          }
-        ]
-      },
-      {
-        "serviceName" : "productcatalogservice",
-        "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "weight": 1,
-            "tags": { "version" : "v52" },
-            "inherit":  ["region", "environment", "tenant-level"]
-          }
-        ],
-        "routes" : [
-          {
-            "route" : "/GetProducts",
-            "downstreamCalls" : { },
-            "tagSets": [{"maxLatency": 100}]
-          },
-          {
-            "route" : "/SearchProducts",
-            "downstreamCalls" : { },
-            "tagSets": [{"maxLatency": 400}]
-          }
-        ]
-      },
-      {
-        "serviceName" : "recommendationservice",
-        "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "weight": 1,
-            "tags" : { "version" : "v234"},
-            "inherit": ["region", "environment", "tenant-level"],
-            "maxLatency":  200
-          }
-        ],
-        "routes" : [
-          {
-            "route" : "/GetRecommendations",
-            "downstreamCalls" : { "productcatalogservice" : "/GetProducts" }
           }
         ]
       },
@@ -190,12 +136,19 @@
       },
       {
         "serviceName" : "currencyservice",
-        "instances" : [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
+        "instances" : [ "currencyservice-239jsdn5hl-we1as" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v27"},
+            "tags" : { "version" : "v27", "error" : true, "http.status_code":  503, "incident": "instance_errors"},
             "inherit":  ["region", "environment", "tenant-level"],
-            "maxLatency": 100
+            "maxLatency": 100,
+            "weight": 4
+          },
+          {
+            "tags" : { "version" : "v27", "incident": "instance_errors"},
+            "inherit":  ["region", "environment", "tenant-level"],
+            "maxLatency": 100,
+            "weight": 1
           }
         ],
         "routes" : [
@@ -209,45 +162,9 @@
           }
         ]
       },
-      {
-        "serviceName" : "adservice",
-        "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "tags": { "version": "v37" },
-            "inherit": ["region", "environment", "tenant-level"],
-            "maxLatency": 500
-          }
-        ],
-        "routes" : [
-          {
-            "route" : "/AdRequest",
-            "downstreamCalls" : { }
-          },
-          {
-            "route" : "/Ad",
-            "downstreamCalls" : { }
-          }
-        ]
-      }
     ]
   },
   "rootRoutes" : [
-    {
-      "service" : "frontend",
-      "route" : "/product",
-      "tracesPerHour" : 4880
-    },
-    {
-      "service" : "frontend",
-      "route" : "/cart",
-      "tracesPerHour" : 24400
-    },
-    {
-      "service" : "frontend",
-      "route" : "/shipping",
-      "tracesPerHour" : 880
-    },
     {
       "service" : "frontend",
       "route" : "/currency",
