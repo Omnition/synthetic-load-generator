@@ -37,10 +37,10 @@ public class App {
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
 
-    @Parameter(names = "--flushIntervalMillis", description = "How often to flush traces for the jaeger collector", required = false)
+    @Parameter(names = "--flushIntervalMillis", description = "How often the jaeger emitter will flush traces", required = false)
     private long flushIntervalMillis = TimeUnit.SECONDS.toMillis(5);
 
-    @Parameter(names = "--maxQueueSize", description = "Maximum queue size for the jaeger collector", required = false)
+    @Parameter(names = "--maxQueueSize", description = "Maximum queue size used by the jaeger emitter", required = false)
     private int maxQueueSize = 100000;
 
     @Parameter(names = "--zipkinV1JsonUrl", description = "URL of the zipkinV1 json collector", required = false)
