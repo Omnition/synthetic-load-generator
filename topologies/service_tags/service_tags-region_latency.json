@@ -121,18 +121,6 @@
               "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
               "version": "v177"
             },
-           "tagGenerators": [
-             {
-               "overTime": {
-                 "name": "collected_usd",
-                 "step": 300,
-                 "period": 86400,
-                 "jitter": 500,
-                 "amplitude": 5000,
-                 "offset": 5500
-               }
-             }
-           ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
