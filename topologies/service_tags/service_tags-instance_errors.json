@@ -100,7 +100,23 @@
           {
             "route" : "/ChargeRequest",
             "downstreamCalls" : { "paymentservice" : "/CreditCardInfo" },
-            "tagSets" : [{"maxLatency": 700}]
+            "tagSets": [
+              {
+                "tagGenerators": [
+                  {
+                    "overTime": {
+                      "name": "collected_usd",
+                      "step": 300,
+                      "period": 86400,
+                      "jitter": 500,
+                      "amplitude": 5000,
+                      "offset": 5000
+                    }
+                  }
+                ],
+                "maxLatency": 700
+              }
+            ]
           },
           {
             "route" : "/CreditCardInfo",

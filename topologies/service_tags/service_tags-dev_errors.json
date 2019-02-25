@@ -77,26 +77,30 @@
               "error":  true, "http.status_code":  500,
               "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ]
             },
-            "tagGenerators": [
-              {
-                "overTime": {
-                  "name": "collected_usd",
-                  "step": 300,
-                  "period": 86400,
-                  "jitter": 500,
-                  "amplitude": 5000,
-                  "offset": 5000
-                }
-              }
-            ],
             "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
           {
             "route" : "/ChargeRequest",
-            "downstreamCalls" : { "paymentservice" : "/CreditCardInfo" },
-            "tagSets" : [{"maxLatency": 700}]
+            "downstreamCalls": { "paymentservice": "/CreditCardInfo" },
+            "tagSets": [
+              {
+                "tagGenerators": [
+                  {
+                    "overTime": {
+                      "name": "collected_usd",
+                      "step": 300,
+                      "period": 86400,
+                      "jitter": 500,
+                      "amplitude": 5000,
+                      "offset": 5000
+                    }
+                  }
+                ],
+                "maxLatency": 700
+              }
+            ]
           },
           {
             "route" : "/CreditCardInfo",
