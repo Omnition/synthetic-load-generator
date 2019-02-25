@@ -141,7 +141,7 @@
               {
                 "overTime": {
                   "name": "collected_usd",
-                  "stepPer": 300,
+                  "step": 300,
                   "period": 86400,
                   "jitter": 500,
                   "amplitude": 5000,
@@ -206,7 +206,7 @@
               {
                 "overTime": {
                   "name": "queue_size",
-                  "stepPer": 300,
+                  "step": 300,
                   "period": 21600,
                   "jitter": 10,
                   "amplitude": 50,

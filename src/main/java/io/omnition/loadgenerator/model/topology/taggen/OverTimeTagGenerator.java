@@ -31,7 +31,12 @@ public class OverTimeTagGenerator implements TagGenerator {
         long t = Instant.now().getEpochSecond();
         // this might get updated more than once per step, and that is ok.
         if (t > lastStep.get() + step || currVal.get() == null) {
-            currVal.set(amplitude * Math.sin(((double) t) / period * 2 * Math.PI) + offset);
+            // Add jitter here as well just for some extra randomness to the sin curve
+            currVal.set(
+                amplitude * Math.sin(((double) t) / period * 2 * Math.PI)
+                    + offset
+                    + random.nextInt(jitter) - (jitter/2)
+            );
             lastStep.set(t);
         }
 

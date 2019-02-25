@@ -79,9 +79,20 @@
             "tags": {
               "k8s.io/container/name": "paymentservice",
               "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
-              "version": "v177",
-              "collected_usd": { "stepPer": 300, "period": 7200, "jitter": 500, "amplitude": 2000, "offset": 1000 }
+              "version": "v177"
             },
+           "tagGenerators": [
+             {
+               "overTime": {
+                 "name": "collected_usd",
+                 "step": 300,
+                 "period": 86400,
+                 "jitter": 500,
+                 "amplitude": 5000,
+                 "offset": 5000
+               }
+             }
+           ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -137,6 +148,18 @@
               "k8s.io/pod/name": [ "emailservice-6b654dbf57-zq8dt", "emailservice-d847fdcf5-j6s2f" ],
               "version": "v17"
             },
+           "tagGenerators": [
+             {
+               "overTime": {
+                 "name": "queue_size",
+                 "step": 300,
+                 "period": 21600,
+                 "jitter": 10,
+                 "amplitude": 50,
+                 "offset": 25
+               }
+             }
+           ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  500
           }
