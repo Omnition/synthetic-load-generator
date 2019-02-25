@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import io.omnition.loadgenerator.model.topology.ServiceRoute;
 import io.omnition.loadgenerator.model.topology.ServiceTier;
-import io.omnition.loadgenerator.model.topology.TagGenerator;
+import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
 import io.omnition.loadgenerator.model.topology.TagSet;
 import io.omnition.loadgenerator.model.topology.Topology;
 import io.omnition.loadgenerator.model.trace.KeyValue;
@@ -41,12 +41,10 @@ public class TraceGenerator {
     }
 
     private Span createSpanForServiceRouteCall(Map<String, Object> parentTags, ServiceTier serviceTier, String routeName, long startTimeMicros) {
-        String instanceName = serviceTier.instances.get(
-                random.nextInt(serviceTier.instances.size()));
         ServiceRoute route = serviceTier.getRoute(routeName);
 
         // send tags of serviceTier and serviceTier instance
-        Service service = new Service(serviceTier.serviceName, instanceName, new ArrayList<>());
+        Service service = new Service(serviceTier.serviceName, new ArrayList<>());
         Span span = new Span();
         span.startTimeMicros = startTimeMicros;
         span.operationName = route.route;
@@ -58,7 +56,7 @@ public class TraceGenerator {
         // Get additional tags for this route, and update with any inherited tags
         TagSet routeTags = serviceTier.getTagSet(routeName);
         HashMap<String, Object> tagsToSet = new HashMap<>(routeTags.tags);
-        for (TagGenerator tagGenerator : routeTags.tagGenerators) {
+        for (TagGeneratorWrapper tagGenerator : routeTags.tagGenerators) {
             tagsToSet.putAll(tagGenerator.generateTags());
         }
         if (parentTags != null && routeTags.inherit != null) {
@@ -69,7 +67,10 @@ public class TraceGenerator {
                 }
             }
         }
-        tagsToSet.put("instance", service.instanceName);
+        if (serviceTier.instances.size() > 0) {
+            String instanceName = serviceTier.instances.get(random.nextInt(serviceTier.instances.size()));
+            tagsToSet.put("instance", instanceName);
+        }
 
         // Set the additional tags on the span
         List<KeyValue> spanTags = tagsToSet.entrySet().stream()

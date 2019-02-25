@@ -3,7 +3,6 @@
     "services" : [
       {
         "serviceName" : "frontend",
-        "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
         "tagSets" : [
           {
             "tags" : {
@@ -11,7 +10,11 @@
               "region" : ["us-west-1", "us-east-1"],
               "incident": ["dev_errors", "region_latency", "tenant_level_errors", "version_errors", "instance_errors"],
               "environment": ["prod", "stag", "dev"],
-              "tenant-level": ["bronze", "silver", "gold"]
+              "tenant-level": ["bronze", "silver", "gold"],
+              "k8s.io/cluster/name": "some-k8s-cluster",
+              "k8s.io/namespace/name":  "some-k8s-namespace",
+              "k8s.io/pod/name": ["frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff"],
+              "k8s.io/container/name": "front-end"
             },
             "maxLatency": 100
           }
@@ -44,12 +47,15 @@
       },
       {
         "serviceName" : "productcatalogservice",
-        "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
         "tagSets" : [
           {
             "weight": 1,
-            "tags": { "version" : "v52" },
-            "inherit":  ["region", "environment", "tenant-level"]
+            "tags": {
+              "k8s.io/container/name": "productcatalogservice",
+              "k8s.io/pod/name": [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
+              "version" : "v52"
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -67,12 +73,14 @@
       },
       {
         "serviceName" : "recommendationservice",
-        "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
         "tagSets" : [
           {
             "weight": 1,
-            "tags" : { "version" : "v234"},
-            "inherit": ["region", "environment", "tenant-level"],
+            "tags" : {
+              "k8s.io/pod/name": [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
+              "version" : "v234"
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  200
           }
         ],
@@ -85,12 +93,14 @@
       },
       {
         "serviceName" : "cartservice",
-        "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v5"},
+            "tags" : {
+              "k8s.io/pod/name": [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
+              "version" : "v5"
+            },
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level"]
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -102,12 +112,14 @@
       },
       {
         "serviceName" : "checkoutservice",
-        "instances" : [ "checkoutservice-6b654dbf57-zq8dt", "checkoutservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
             "maxLatency": 500,
-            "tags" : { "version" : "v37", "region" : "us-west-1" },
-            "inherit":  ["region", "environment", "tenant-level"]
+            "tags" : {
+              "version" : "v37",
+              "k8s.io/pod/name": [ "checkoutservice-6b654dbf57-zq8dt", "checkoutservice-d847fdcf5-j6s2f" ]
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -119,11 +131,25 @@
       },
       {
         "serviceName" : "paymentservice",
-        "instances" : [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v177"},
-            "inherit":  ["region", "environment", "tenant-level"]
+            "tags" : {
+              "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
+              "version" : "v177"
+            },
+            "tagGenerators": [
+              {
+                "overTime": {
+                  "name": "collected_usd",
+                  "stepPer": 300,
+                  "period": 86400,
+                  "jitter": 500,
+                  "amplitude": 5000,
+                  "offset": 5000
+                }
+              }
+            ],
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -141,11 +167,13 @@
       },
       {
         "serviceName" : "shippingservice",
-        "instances" : [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v127"},
-            "inherit":  ["region", "environment", "tenant-level"]
+            "tags" : {
+              "k8s.io/pod/name": [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
+              "version" : "v127"
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -168,11 +196,25 @@
       },
       {
         "serviceName" : "emailservice",
-        "instances" : [ "emailservice-6b654dbf57-zq8dt", "emailservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v17"},
-            "inherit":  ["region", "environment", "tenant-level"],
+            "tags" : {
+              "k8s.io/pod/name": [ "emailservice-6b654dbf57-zq8dt", "emailservice-d847fdcf5-j6s2f" ],
+              "version" : "v17"
+            },
+            "tagGenerators": [
+              {
+                "overTime": {
+                  "name": "queue_size",
+                  "stepPer": 300,
+                  "period": 21600,
+                  "jitter": 10,
+                  "amplitude": 50,
+                  "offset": 25
+                }
+              }
+            ],
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  500
           }
         ],
@@ -190,11 +232,13 @@
       },
       {
         "serviceName" : "currencyservice",
-        "instances" : [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v27"},
-            "inherit":  ["region", "environment", "tenant-level"],
+            "tags" : {
+              "k8s.io/pod/name": [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
+              "version" : "v27"
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 100
           }
         ],
@@ -211,11 +255,14 @@
       },
       {
         "serviceName" : "adservice",
-        "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
         "tagSets" : [
           {
-            "tags": { "version": "v37" },
-            "inherit": ["region", "environment", "tenant-level"],
+            "tags": {
+              "k8s.io/container/name": "adservice",
+              "k8s.io/pod/name": [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
+              "version": "v37"
+            },
+            "inherit": ["region", "environment", "tenant-level", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 500
           }
         ],

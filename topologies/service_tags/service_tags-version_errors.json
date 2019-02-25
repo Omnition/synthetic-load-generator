@@ -3,7 +3,6 @@
     "services" : [
       {
         "serviceName" : "frontend",
-        "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
         "tagSets" : [
           {
             "tags" : {
@@ -11,7 +10,11 @@
               "region" : ["us-west-1", "us-east-1"],
               "environment": "prod",
               "incident": "version_errors",
-              "tenant-level": ["bronze", "silver", "gold"]
+              "tenant-level": ["bronze", "silver", "gold"],
+              "k8s.io/cluster/name": "some-k8s-cluster",
+              "k8s.io/namespace/name":  "some-k8s-namespace",
+              "k8s.io/pod/name": ["frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff"],
+              "k8s.io/container/name": "front-end"
             },
             "maxLatency": 100
           }
@@ -29,12 +32,14 @@
       },
       {
         "serviceName" : "productcatalogservice",
-        "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "weight": 1,
-            "tags": { "version" : "v52" },
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+        "tagSets": [
+         {
+            "tags": {
+              "k8s.io/container/name": "productcatalogservice",
+              "k8s.io/pod/name": [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
+              "version": "v52"
+            },
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -47,12 +52,14 @@
       },
       {
         "serviceName" : "recommendationservice",
-        "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
         "tagSets" : [
           {
-            "weight": 1,
-            "tags" : { "version" : "v235", "error" : true, "http.status_code":  503, "incident": "version_errors"},
-            "inherit": ["region", "environment", "tenant-level"],
+            "tags" : { 
+              "k8s.io/pod/name": [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
+              "version" : "v235", 
+              "error" : true, "http.status_code":  503
+            },
+            "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  200
           }
         ],
@@ -65,12 +72,15 @@
       },
       {
         "serviceName" : "cartservice",
-        "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v5"},
+         {
+            "tags": {
+              "k8s.io/container/name": "cartservice",
+              "k8s.io/pod/name": [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
+              "version": "v5"
+            },
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -83,11 +93,14 @@
       },
       {
         "serviceName" : "adservice",
-        "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "tags": { "version": "v37" },
-            "inherit": ["region", "environment", "tenant-level"],
+        "tagSets": [
+         {
+            "tags": {
+              "k8s.io/container/name": "adservice",
+              "k8s.io/pod/name": [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
+              "version": "v37"
+            },
+            "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 500
           }
         ],

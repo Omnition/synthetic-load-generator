@@ -3,15 +3,18 @@
     "services" : [
       {
         "serviceName" : "frontend",
-        "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
         "tagSets" : [
           {
             "tags" : {
               "version" : "v127",
               "region" : ["us-west-1", "us-east-1"],
-              "environment": "dev",
               "incident": "dev_errors",
-              "tenant-level": ["bronze", "silver", "gold"]
+              "environment": "dev",
+              "tenant-level": ["bronze", "silver", "gold"],
+              "k8s.io/cluster/name": "some-k8s-cluster",
+              "k8s.io/namespace/name":  "some-k8s-namespace",
+              "k8s.io/pod/name": ["frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff"],
+              "k8s.io/container/name": "front-end"
             },
             "maxLatency": 100
           }
@@ -26,12 +29,15 @@
       },
       {
         "serviceName" : "cartservice",
-        "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v5"},
+         {
+            "tags": {
+              "k8s.io/container/name": "cartservice",
+              "k8s.io/pod/name": [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
+              "version": "v5"
+            },
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -44,12 +50,15 @@
       },
       {
         "serviceName" : "checkoutservice",
-        "instances" : [ "checkoutservice-6b654dbf57-zq8dt", "checkoutservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
+         {
+            "tags": {
+              "k8s.io/container/name": "checkoutservice",
+              "k8s.io/pod/name": [ "checkoutservice-6b654dbf57-zq8dt", "checkoutservice-d847fdcf5-j6s2f" ],
+              "version": "v37"
+            },
             "maxLatency": 500,
-            "tags" : { "version" : "v37", "region" : "us-west-1" },
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -61,11 +70,15 @@
       },
       {
         "serviceName" : "paymentservice",
-        "instances" : [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
         "tagSets": [
           {
-            "tags" : { "version" : "v177", "error":  true, "http.status_code":  500},
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+            "tags" : {
+              "version" : "v177",
+              "error":  true, "http.status_code":  500,
+              "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
+              "collected_usd": { "stepPer": 300, "period": 7200, "jitter": 500, "amplitude": 2000, "offset": 1000 }
+            },
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -83,11 +96,14 @@
       },
       {
         "serviceName" : "shippingservice",
-        "instances" : [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v127"},
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+         {
+            "tags": {
+              "k8s.io/container/name": "shippingservice",
+              "k8s.io/pod/name": [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
+              "version": "v127"
+            },
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -110,11 +126,14 @@
       },
       {
         "serviceName" : "emailservice",
-        "instances" : [ "emailservice-6b654dbf57-zq8dt", "emailservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v17"},
-            "inherit":  ["region", "environment", "tenant-level", "incident"],
+         {
+            "tags": {
+              "k8s.io/container/name": "emailservice",
+              "k8s.io/pod/name": [ "emailservice-6b654dbf57-zq8dt", "emailservice-d847fdcf5-j6s2f" ],
+              "version": "v17"
+            },
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  500
           }
         ],
@@ -132,10 +151,13 @@
       },
       {
         "serviceName" : "currencyservice",
-        "instances" : [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v27"},
+         {
+            "tags": {
+              "k8s.io/container/name": "currencyservice",
+              "k8s.io/pod/name": [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
+              "version": "v27"
+            },
             "inherit":  ["region", "environment", "tenant-level", "incident"],
             "maxLatency": 100
           }
@@ -153,10 +175,13 @@
       },
       {
         "serviceName" : "adservice",
-        "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "tags": { "version": "v37" },
+        "tagSets": [
+         {
+            "tags": {
+              "k8s.io/container/name": "adservice",
+              "k8s.io/pod/name": [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
+              "version": "v37"
+            },
             "inherit": ["region", "environment", "tenant-level"],
             "maxLatency": 500
           }

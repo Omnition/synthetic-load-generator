@@ -1,5 +1,7 @@
 package io.omnition.loadgenerator.model.topology;
 
+import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +14,7 @@ public class TagSet {
     private Integer weight;
 
     public Map<String, Object> tags = new HashMap<>();
-    public List<TagGenerator> tagGenerators = new ArrayList<>();
+    public List<TagGeneratorWrapper> tagGenerators = new ArrayList<>();
     public List<String> inherit = new ArrayList<>();
     public Integer maxLatency;
     public Integer minLatency;

@@ -4,7 +4,7 @@
         {
           "serviceName" : "frontend",
           "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/product",
@@ -27,7 +27,7 @@
         {
           "serviceName" : "productcatalogservice",
           "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/GetProducts",
@@ -38,7 +38,7 @@
         {
           "serviceName" : "recommendationservice",
           "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/GetRecommendations",
@@ -49,7 +49,7 @@
         {
           "serviceName" : "adservice",
           "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/AdRequest",
@@ -64,7 +64,7 @@
         {
           "serviceName" : "spanFiller0",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/0",
@@ -75,7 +75,7 @@
         {
           "serviceName" : "spanFiller1",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/1",
@@ -86,7 +86,7 @@
         {
           "serviceName" : "spanFiller2",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/2",
@@ -97,7 +97,7 @@
         {
           "serviceName" : "spanFiller3",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/3",
@@ -108,7 +108,7 @@
         {
           "serviceName" : "spanFiller4",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/4",
@@ -119,7 +119,7 @@
         {
           "serviceName" : "spanFiller5",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/5",
@@ -130,7 +130,7 @@
         {
           "serviceName" : "spanFiller6",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/6",
@@ -141,7 +141,7 @@
         {
           "serviceName" : "spanFiller7",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/7",
@@ -152,7 +152,7 @@
         {
           "serviceName" : "spanFiller8",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/8",
@@ -163,7 +163,7 @@
         {
           "serviceName" : "spanFiller9",
           "instances" : [ "spanfiller-6b654dbf57-00000" ],
-          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [{"numTags": 20, "numVals":  100, "valLength": 64}]} ],
+          "tagSets": [ { "weight": 1, "maxLatency": 350, "tagGenerators": [ { "multi": {"numTags": 20, "numVals":  100, "valLength": 64}}]} ],
           "routes" : [
             {
               "route" : "/9",

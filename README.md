@@ -24,7 +24,7 @@ a service. Services and routes can set tags probabilistically based on integer w
 probability of selection is <weight of specific tagset> divided by <sum of all weights>. Additionally, services/routes
 can inherit tags from their direct caller by specifying the keys that should be inherited, which can be
 useful for modeling region-locked flows. TagGenerators can also be added to add many tags with many values of varying
-length.
+length, or tags with numerical values that vary slowly over time.
 
 Simple Example JSON:
 ```json
@@ -35,7 +35,7 @@ Simple Example JSON:
         "serviceName" : "poke-mart",
         "instances" : [ "viridian-d847fdcf5-j6s2f", "pallet-79d8c8d6c8-9sbff" ],
         "tagSets" : [
-          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }, "tagGenerators": [{"numTags": 32, "numVals": 152, "valLength": 64}] },
+          { "weight": 2, "tags": { "generation" : "v1", "region" : "kanto" }, "tagGenerators": [ {"multi": {"numTags": 32, "numVals": 152, "valLength": 64}}] },
           { "tags": { "generation" : "v2", "region" : "johto" }}
         ],
         "routes" : [
