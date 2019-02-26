@@ -40,6 +40,13 @@
               "k8s.io/pod/name": [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
               "version": "v52"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -60,6 +67,13 @@
               "k8s.io/pod/name": [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
               "version": "v234"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  200
           }
@@ -80,6 +94,13 @@
               "region" : "us-east-1",
               "k8s.io/pod/name": [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ]
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["environment", "tenant-level", "incident","k8s.io/cluster/name", "k8s.io/namespace/name"],
             "minLatency": 1000,
             "maxLatency":  5000
@@ -102,6 +123,13 @@
               "version": "v37"
             },
             "maxLatency": 500,
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -121,6 +149,13 @@
               "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
               "version": "v177"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -162,6 +197,13 @@
               "k8s.io/pod/name": [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
               "version": "v127"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -204,6 +246,13 @@
                }
              }
            ],
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  500
           }
@@ -229,6 +278,13 @@
               "k8s.io/pod/name": [ "currencyservice-6b654dbf57-zq8dt", "currencyservice-d847fdcf5-j6s2f" ],
               "version": "v27"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 100
           }

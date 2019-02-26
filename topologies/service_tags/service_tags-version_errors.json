@@ -39,6 +39,13 @@
               "k8s.io/pod/name": [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
               "version": "v52"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -59,6 +66,13 @@
               "version" : "v235", 
               "error" : true, "http.status_code":  503
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  200
           }
@@ -80,6 +94,13 @@
               "version": "v5"
             },
             "maxLatency": 200,
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -100,6 +121,13 @@
               "k8s.io/pod/name": [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
               "version": "v37"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 500
           }

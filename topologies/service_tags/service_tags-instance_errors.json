@@ -42,6 +42,13 @@
               "version": "v5"
             },
             "maxLatency": 200,
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -62,6 +69,13 @@
               "version": "v37"
             },
             "maxLatency": 500,
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -81,6 +95,13 @@
               "k8s.io/pod/name": [ "paymentservice-6b654dbf57-zq8dt", "paymentservice-d847fdcf5-j6s2f" ],
               "version": "v177"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -122,6 +143,13 @@
               "k8s.io/pod/name": [ "shippingservice-6b654dbf57-zq8dt", "shippingservice-d847fdcf5-j6s2f" ],
               "version": "v127"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
@@ -164,6 +192,13 @@
                }
              }
            ],
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  500
           }
@@ -190,12 +225,26 @@
               "incident": "instance_errors",
               "k8s.io/pod/name": "currencyservice-239jsdn5hl-we1as"
             },
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 100,
             "weight": 4
           },
           {
             "tags" : { "version" : "v27", "incident": "instance_errors"},
+                        "tagGenerators": [
+              {
+                "multi": {
+                  "numTags": 50, "numVals":  200, "valLength": 32
+                }
+              }
+            ],
             "inherit": ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 100,
             "weight": 1
