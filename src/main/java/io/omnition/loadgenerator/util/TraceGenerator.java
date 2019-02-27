@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import io.omnition.loadgenerator.model.topology.ServiceRoute;
 import io.omnition.loadgenerator.model.topology.ServiceTier;
-import io.omnition.loadgenerator.model.topology.TagGenerator;
+import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
 import io.omnition.loadgenerator.model.topology.TagSet;
 import io.omnition.loadgenerator.model.topology.Topology;
 import io.omnition.loadgenerator.model.trace.KeyValue;
@@ -40,13 +40,11 @@ public class TraceGenerator {
         this.topology = topology;
     }
 
-    private Span createSpanForServiceRouteCall(Map<String, Object> parentTags, ServiceTier serviceTier, String routeName, long startTimeMicros) {
-        String instanceName = serviceTier.instances.get(
-                random.nextInt(serviceTier.instances.size()));
+    private Span createSpanForServiceRouteCall(Map<String, KeyValue> parentTags, ServiceTier serviceTier, String routeName, long startTimeMicros) {
         ServiceRoute route = serviceTier.getRoute(routeName);
 
         // send tags of serviceTier and serviceTier instance
-        Service service = new Service(serviceTier.serviceName, instanceName, new ArrayList<>());
+        Service service = new Service(serviceTier.serviceName, new ArrayList<>());
         Span span = new Span();
         span.startTimeMicros = startTimeMicros;
         span.operationName = route.route;
@@ -57,25 +55,30 @@ public class TraceGenerator {
         span.setHttpUrlTag("http://" + serviceTier.serviceName + routeName);
         // Get additional tags for this route, and update with any inherited tags
         TagSet routeTags = serviceTier.getTagSet(routeName);
-        HashMap<String, Object> tagsToSet = new HashMap<>(routeTags.tags);
-        for (TagGenerator tagGenerator : routeTags.tagGenerators) {
-            tagsToSet.putAll(tagGenerator.generateTags());
-        }
+        HashMap<String, KeyValue> tagsToSet = new HashMap<>(routeTags.getKeyValueMap());
         if (parentTags != null && routeTags.inherit != null) {
             for (String inheritTagKey : routeTags.inherit) {
-                Object value = parentTags.get(inheritTagKey);
+                KeyValue value = parentTags.get(inheritTagKey);
                 if (value != null) {
                     tagsToSet.put(inheritTagKey, value);
                 }
             }
         }
-        tagsToSet.put("instance", service.instanceName);
+        for (TagGeneratorWrapper tagGenerator : routeTags.tagGenerators) {
+            tagGenerator.addTagsTo(tagsToSet);
+        }
+        if (tagsToSet.get(SpanConventions.HTTP_STATUS_CODE_KEY) == null) {
+            tagsToSet.put(
+                SpanConventions.HTTP_STATUS_CODE_KEY,
+                KeyValue.ofLongType(SpanConventions.HTTP_STATUS_CODE_KEY, 200L)
+            );
+        }
 
         // Set the additional tags on the span
-        List<KeyValue> spanTags = tagsToSet.entrySet().stream()
-            .map(t -> entryToKeyValue(t.getKey(), t.getValue()))
+        List<KeyValue> spanTags = tagsToSet.values().stream()
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
+
         span.tags.addAll(spanTags);
 
         final AtomicLong maxEndTime = new AtomicLong(startTimeMicros);
@@ -106,19 +109,4 @@ public class TraceGenerator {
         return span;
     }
 
-    private KeyValue entryToKeyValue(String key, Object val) {
-        if (val instanceof String) {
-            return KeyValue.ofStringType(key, (String) val);
-        }
-        if (val instanceof Double) {
-            return KeyValue.ofLongType(key, ((Double) val).longValue());
-        }
-        if (val instanceof Boolean) {
-            return KeyValue.ofBooleanType(key, (Boolean) val);
-        }
-        if (val instanceof List) {
-            return entryToKeyValue(key, ((List) val).get(random.nextInt(((List) val).size())));
-        }
-        return null;
-    }
 }

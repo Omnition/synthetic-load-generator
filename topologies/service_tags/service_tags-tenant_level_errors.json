@@ -3,7 +3,6 @@
     "services" : [
       {
         "serviceName" : "frontend",
-        "instances" : [ "frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-9sbff" ],
         "tagSets" : [
           {
             "tags" : {
@@ -11,8 +10,46 @@
               "region" : ["us-west-1", "us-east-1"],
               "environment": "prod",
               "incident":  "tenant_level_errors",
-              "tenant-level": "gold"
+              "tenant-level": "gold",
+              "k8s.io/container/name": "front-end"
             },
+            "tagGenerators": [
+              {
+                "conditional": {
+                  "name": "k8s.io/cluster/name",
+                  "checkTagKey": "region",
+                  "matchers": [
+                    {"key":  "us-west-1", "val": "us-west-1-cluster"},
+                    {"key":  "us-east-1", "val": "us-east-1-cluster"}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "conditional": {
+                  "name": "k8s.io/namespace/name",
+                  "checkTagKey": "region",
+                  "matchers": [
+                    {"key":  "us-west-1", "val": ["us-west-1-namespace-1", "us-west-1-namespace-2"]},
+                    {"key":  "us-east-1", "val": ["us-east-1-namespace-1", "us-east-1-namespace-2"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "conditional": {
+                  "name": "k8s.io/pod/name",
+                  "checkTagKey": "k8s.io/namespace/name",
+                  "matchers": [
+                    {"key":  "us-west-1-namespace-1", "val": ["frontend-6b654dbf57-zq8dt", "frontend-d847fdcf5-j6s2f", "frontend-79d8c8d6c8-as123"]},
+                    {"key":  "us-west-1-namespace-2", "val": ["frontend-ljb235az3d-23hnf", "frontend-kjm3c264f-a2dff", "frontend-dertyuyic8-9ddrw"]},
+                    {"key":  "us-east-1-namespace-1", "val": ["frontend-asdfg356bv-92hct", "frontend-adsgmcccc-j6see", "frontend-lrkxnnf6cr-8544f"]},
+                    {"key":  "us-east-1-namespace-2", "val": ["frontend-29681dgfdd-amr82", "frontend-daliuytgq-dd58f", "frontend-fflpqoerr9-999ee"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              }
+            ],
             "maxLatency": 100
           }
         ],
@@ -29,12 +66,40 @@
       },
       {
         "serviceName" : "productcatalogservice",
-        "instances" : [ "productcatalogservice-6b654dbf57-zq8dt", "productcatalogservice-d847fdcf5-j6s2f" ],
         "tagSets" : [
           {
-            "weight": 1,
-            "tags": { "version" : "v52", "tenant-level":  "gold", "error" : true, "http.status_code":  503},
-            "inherit":  ["environment", "region", "incident"]
+            "tags": {
+              "k8s.io/container/name": "productcatalogservice",
+              "version": "v52",
+              "tenant-level":  "gold",
+              "error" : true, "http.status_code":  503
+            },
+            "tagGenerators": [
+              {
+                "conditional": {
+                  "name": "k8s.io/pod/name",
+                  "checkTagKey": "k8s.io/namespace/name",
+                  "matchers": [
+                    {"key":  "us-west-1-namespace-1", "val": ["productcatalogservice-prtuc2s4i7-zq8dt", "productcatalogservice-d847fdcf5-j6s2f"]},
+                    {"key":  "us-west-1-namespace-2", "val": ["productcatalogservice-mr23jlhghj-ldsdt", "productcatalogservice-a4kh6nvci-13d45"]},
+                    {"key":  "us-east-1-namespace-1", "val": ["productcatalogservice-bm44rbmn57-15468", "productcatalogservice-iojmbqwer-4572d"]},
+                    {"key":  "us-east-1-namespace-2", "val": ["productcatalogservice-18iodsfh27-r234t", "productcatalogservice-fasdfvlid-k11421"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "overTime": {
+                  "name": "products_returned",
+                  "step": 999999999,
+                  "period": 1,
+                  "jitter": 60,
+                  "amplitude": 0,
+                  "offset": 100
+                }
+              }
+            ],
+            "inherit":  ["environment", "region", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -52,12 +117,38 @@
       },
       {
         "serviceName" : "recommendationservice",
-        "instances" : [ "recommendationservice-6b654dbf57-zq8dt", "recommendationservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "weight": 1,
-            "tags" : { "version" : "v234"},
-            "inherit":  ["region", "environment", "tenant-level", "incident"],
+        "tagSets": [
+         {
+            "tags": {
+              "k8s.io/container/name": "recommendationservice",
+              "version": "v234"
+            },
+            "tagGenerators": [
+              {
+                "conditional": {
+                  "name": "k8s.io/pod/name",
+                  "checkTagKey": "k8s.io/namespace/name",
+                  "matchers": [
+                    {"key":  "us-west-1-namespace-1", "val": ["recommendationservice-prtuc2s4i7-zq8dt", "recommendationservice-d847fdcf5-j6s2f"]},
+                    {"key":  "us-west-1-namespace-2", "val": ["recommendationservice-mr23jlhghj-ldsdt", "recommendationservice-a4kh6nvci-13d45"]},
+                    {"key":  "us-east-1-namespace-1", "val": ["recommendationservice-bm44rbmn57-15468", "recommendationservice-iojmbqwer-4572d"]},
+                    {"key":  "us-east-1-namespace-2", "val": ["recommendationservice-18iodsfh27-r234t", "recommendationservice-fasdfvlid-k11421"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "overTime": {
+                  "name": "recommendation_affinity_score",
+                  "step": 999999999,
+                  "period": 1,
+                  "jitter": 2000,
+                  "amplitude": 0,
+                  "offset": 1000
+                }
+              }
+            ],
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency":  200
           }
         ],
@@ -70,12 +161,39 @@
       },
       {
         "serviceName" : "cartservice",
-        "instances" : [ "cartservice-6b654dbf57-zq8dt", "cartservice-d847fdcf5-j6s2f" ],
         "tagSets": [
-          {
-            "tags" : { "version" : "v5"},
+         {
+            "tags": {
+              "k8s.io/container/name": "cartservice",
+              "version": "v5"
+            },
+            "tagGenerators": [
+              {
+                "conditional": {
+                  "name": "k8s.io/pod/name",
+                  "checkTagKey": "k8s.io/namespace/name",
+                  "matchers": [
+                    {"key":  "us-west-1-namespace-1", "val": ["cartservice-prtuc2s4i7-zq8dt", "cartservice-d847fdcf5-j6s2f"]},
+                    {"key":  "us-west-1-namespace-2", "val": ["cartservice-mr23jlhghj-ldsdt", "cartservice-a4kh6nvci-13d45"]},
+                    {"key":  "us-east-1-namespace-1", "val": ["cartservice-bm44rbmn57-15468", "cartservice-iojmbqwer-4572d"]},
+                    {"key":  "us-east-1-namespace-2", "val": ["cartservice-18iodsfh27-r234t", "cartservice-fasdfvlid-k11421"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "overTime": {
+                  "name": "cart_size",
+                  "step": 999999999,
+                  "period": 1,
+                  "jitter": 2,
+                  "amplitude": 0,
+                  "offset": 3
+                }
+              }
+            ],
             "maxLatency": 200,
-            "inherit":  ["region", "environment", "tenant-level", "incident"]
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"]
           }
         ],
         "routes" : [
@@ -88,11 +206,48 @@
       },
       {
         "serviceName" : "adservice",
-        "instances" : [ "adservice-6b654dbf57-zq8dt", "adservice-d847fdcf5-j6s2f" ],
-        "tagSets" : [
-          {
-            "tags": { "version": "v37" },
-            "inherit":  ["region", "environment", "tenant-level", "incident"],
+        "tagSets": [
+         {
+            "tags": {
+              "k8s.io/container/name": "adservice",
+              "version": "v37"
+            },
+            "tagGenerators": [
+              {
+                "conditional": {
+                  "name": "k8s.io/pod/name",
+                  "checkTagKey": "k8s.io/namespace/name",
+                  "matchers": [
+                    {"key":  "us-west-1-namespace-1", "val": ["adservice-prtuc2s4i7-zq8dt", "adservice-d847fdcf5-j6s2f"]},
+                    {"key":  "us-west-1-namespace-2", "val": ["adservice-mr23jlhghj-ldsdt", "adservice-a4kh6nvci-13d45"]},
+                    {"key":  "us-east-1-namespace-1", "val": ["adservice-bm44rbmn57-15468", "adservice-iojmbqwer-4572d"]},
+                    {"key":  "us-east-1-namespace-2", "val": ["adservice-18iodsfh27-r234t", "adservice-fasdfvlid-k11421"]}
+                  ],
+                  "fallthrough": "unknown"
+                }
+              },
+              {
+                "overTime": {
+                  "name": "ad_affinity_score",
+                  "step": 999999999,
+                  "period": 1,
+                  "jitter": 400,
+                  "amplitude": 0,
+                  "offset": 1000
+                }
+              },
+              {
+                "overTime": {
+                  "name": "ad_size_bytes",
+                  "step": 300,
+                  "period": 3600,
+                  "jitter": 1000,
+                  "amplitude": 1000,
+                  "offset": 4000
+                }
+              }
+            ],
+            "inherit":  ["region", "environment", "tenant-level", "incident", "k8s.io/cluster/name", "k8s.io/namespace/name"],
             "maxLatency": 500
           }
         ],

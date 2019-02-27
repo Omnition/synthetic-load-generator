@@ -1,4 +1,4 @@
-package io.omnition.loadgenerator.model.topology;
+package io.omnition.loadgenerator.model.topology.taggen;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
