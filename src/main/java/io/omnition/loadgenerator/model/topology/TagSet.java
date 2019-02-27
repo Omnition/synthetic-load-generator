@@ -1,12 +1,14 @@
 package io.omnition.loadgenerator.model.topology;
 
 import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
+import io.omnition.loadgenerator.model.trace.KeyValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class TagSet {
     private static Random random = new Random();
@@ -31,6 +33,11 @@ public class TagSet {
             return 1;
         }
         return weight;
+    }
+
+    public Map<String, KeyValue> getKeyValueMap() {
+        return tags.entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> KeyValue.FromObject(e.getKey(), e.getValue())));
     }
 
     public int randomLatency() {

@@ -1,8 +1,8 @@
 package io.omnition.loadgenerator.model.topology.taggen;
 
+import io.omnition.loadgenerator.model.trace.KeyValue;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -17,8 +17,7 @@ public class MultiTagGenerator implements TagGenerator {
     public int numVals = 0;
 
     @Override
-    public Map<String, Object> generateTags() {
-        Map<String, Object> retVal = new HashMap<>();
+    public void addTagsTo(Map<String, KeyValue> tags) {
         if (numTags != 0 && tagName != null) {
             throw new IllegalArgumentException("numTags and tagName cannot both be set");
         }
@@ -26,13 +25,12 @@ public class MultiTagGenerator implements TagGenerator {
             for (int genIndex = 0; genIndex < numTags; genIndex++) {
                 String val;
                 val = RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals)));
-                retVal.put(tagGen.getForIndex(genIndex), val);
+                String tagKeyName = tagGen.getForIndex(genIndex);
+                tags.put(tagKeyName, KeyValue.ofStringType(tagKeyName, val));
             }
         } else {
-            retVal.put(tagName, RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals))));
+            tags.put(tagName, KeyValue.ofStringType(tagName, RandomStringUtils.random(valLength, 0, 0, true, true, null, new Random(rand.nextInt(numVals)))));
         }
-
-        return retVal;
     }
 
 }

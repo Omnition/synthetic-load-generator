@@ -1,7 +1,9 @@
 package io.omnition.loadgenerator.model.topology.taggen;
 
+import io.omnition.loadgenerator.model.trace.KeyValue;
+
 import java.util.Map;
 
 public interface TagGenerator {
-    Map<String, Object> generateTags();
+    void addTagsTo(Map<String, KeyValue> tags);
 }

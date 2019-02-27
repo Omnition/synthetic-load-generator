@@ -1,7 +1,8 @@
 package io.omnition.loadgenerator.model.topology.taggen;
 
+import io.omnition.loadgenerator.model.trace.KeyValue;
+
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -21,10 +22,8 @@ public class OverTimeTagGenerator implements TagGenerator {
     public String name;
 
     @Override
-    public Map<String, Object> generateTags() {
-        HashMap<String, Object> tag = new HashMap<>();
-        tag.put(name, genVal());
-        return tag;
+    public void addTagsTo(Map<String, KeyValue> tags) {
+        tags.put(name, KeyValue.ofLongType(name, genVal().longValue()));
     }
 
     private Double genVal() {

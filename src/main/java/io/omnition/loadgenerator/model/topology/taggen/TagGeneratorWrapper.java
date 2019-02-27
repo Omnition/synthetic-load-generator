@@ -1,21 +1,24 @@
 package io.omnition.loadgenerator.model.topology.taggen;
 
-import java.util.Collections;
+import io.omnition.loadgenerator.model.trace.KeyValue;
+
 import java.util.Map;
 
 public class TagGeneratorWrapper implements TagGenerator {
 
     public MultiTagGenerator multi;
     public OverTimeTagGenerator overTime;
+    public ConditionalTagGenerator conditional;
 
     @Override
-    public Map<String, Object> generateTags() {
+    public void addTagsTo(Map<String, KeyValue> tags) {
         if (multi != null) {
-            return multi.generateTags();
+            multi.addTagsTo(tags);
         } else if (overTime != null) {
-            return overTime.generateTags();
+            overTime.addTagsTo(tags);
+        } else if (conditional != null) {
+            conditional.addTagsTo(tags);
         }
-
-        return Collections.emptyMap();
     }
+
 }
