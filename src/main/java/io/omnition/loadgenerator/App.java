@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.omnition.loadgenerator.util.ITraceEmitter;
 import io.omnition.loadgenerator.util.ZipkinTraceEmitter;
-import org.apache.log4j.Logger;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -23,10 +22,12 @@ import io.omnition.loadgenerator.LoadGeneratorParams.RootServiceRoute;
 import io.omnition.loadgenerator.util.JaegerTraceEmitter;
 import io.omnition.loadgenerator.util.ScheduledTraceGenerator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zipkin2.codec.SpanBytesEncoder;
 
 public class App {
-    private final static Logger logger = Logger.getLogger(App.class);
+    private final static Logger logger = LoggerFactory.getLogger(App.class);
 
     @Parameter(names = "--paramsFile", description = "Name of the file containing the topology params", required = true)
     private String topologyFile;

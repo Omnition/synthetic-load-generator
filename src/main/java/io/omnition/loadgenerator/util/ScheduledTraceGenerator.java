@@ -5,13 +5,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-
 import io.omnition.loadgenerator.model.topology.Topology;
-import io.omnition.loadgenerator.model.trace.Trace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScheduledTraceGenerator {
-    private static final Logger logger = Logger.getLogger(ScheduledTraceGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScheduledTraceGenerator.class);
     private static final long GRACEFUL_SHUTDOWN_TIME_SEC = 5;
     private static final int NUM_THREADS = 5;
     private final ScheduledExecutorService scheduler;
@@ -20,7 +19,7 @@ public class ScheduledTraceGenerator {
     private final Topology topology;
     private final String service;
     private final String route;
-    private final ITraceEmitter emitter;
+    private final TraceGenerator generator;
 
     public ScheduledTraceGenerator(
             Topology topology, String service, String route, int tracesPerHour, ITraceEmitter emitter) {
@@ -29,7 +28,7 @@ public class ScheduledTraceGenerator {
         this.topology = topology;
         this.service = service;
         this.route = route;
-        this.emitter = emitter;
+        this.generator = new TraceGenerator(emitter, topology);
     }
 
     public void start() {
@@ -62,8 +61,7 @@ public class ScheduledTraceGenerator {
     private void emitOneTrace() {
         try {
             long now = TimeUnit.MILLISECONDS.toMicros(System.currentTimeMillis());
-            Trace trace = TraceGenerator.generate(this.topology, this.service, this.route, now);
-            String traceId = this.emitter.emit(trace);
+            String traceId = generator.generate(this.service, this.route, now);
             logger.info(String.format("Emitted traceId %s for service %s route %s",
                     traceId, this.service, this.route));
         } catch (Exception e) {

@@ -149,7 +149,9 @@
           {
             "tags" : {
               "version" : "v5",
-              "region" : "us-east-1"
+              "region" : "us-east-1",
+              "k8s.io/namespace/name": ["us-east-1-namespace-1", "us-east-1-namespace-2"],
+              "k8s.io/cluster/name": "us-east-1-cluster"
             },
             "tagGenerators": [
               {
@@ -157,8 +159,6 @@
                   "name": "k8s.io/pod/name",
                   "checkTagKey": "k8s.io/namespace/name",
                   "matchers": [
-                    {"key":  "us-west-1-namespace-1", "val": ["cartservice-prtuc2s4i7-zq8dt", "cartservice-d847fdcf5-j6s2f"]},
-                    {"key":  "us-west-1-namespace-2", "val": ["cartservice-mr23jlhghj-ldsdt", "cartservice-a4kh6nvci-13d45"]},
                     {"key":  "us-east-1-namespace-1", "val": ["cartservice-bm44rbmn57-15468", "cartservice-iojmbqwer-4572d"]},
                     {"key":  "us-east-1-namespace-2", "val": ["cartservice-18iodsfh27-r234t", "cartservice-fasdfvlid-k11421"]}
                   ],
