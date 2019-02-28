@@ -88,6 +88,13 @@
       },
       {
         "serviceName" : "productcatalogservice",
+        "logs": [
+          {
+            "msg":  "processing request in productcatalogservice",
+            "errorMsg":  "error processing request in productcatalogservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "weight": 1,
@@ -138,6 +145,13 @@
       },
       {
         "serviceName" : "recommendationservice",
+        "logs": [
+          {
+            "msg":  "processing request in recommendationservice",
+            "errorMsg":  "error processing request in recommendationservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "weight": 1,
@@ -182,6 +196,13 @@
       },
       {
         "serviceName" : "cartservice",
+        "logs": [
+          {
+            "msg":  "processing request in cartservice",
+            "errorMsg":  "error processing request in cartservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
           {
             "tags" : {
@@ -225,6 +246,13 @@
       },
       {
         "serviceName" : "checkoutservice",
+        "logs": [
+          {
+            "msg":  "processing request in checkoutservice",
+            "errorMsg":  "error processing request in checkoutservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
           {
             "maxLatency": 500,
@@ -278,6 +306,13 @@
       },
       {
         "serviceName" : "paymentservice",
+        "logs": [
+          {
+            "msg":  "processing request in paymentservice",
+            "errorMsg":  "error processing request in paymentservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
           {
             "tags" : {
@@ -332,6 +367,13 @@
       },
       {
         "serviceName" : "shippingservice",
+        "logs": [
+          {
+            "msg":  "processing request in shippingservice",
+            "errorMsg":  "error processing request in shippingservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
           {
             "tags" : {
@@ -395,6 +437,13 @@
       },
       {
         "serviceName" : "emailservice",
+        "logs": [
+          {
+            "msg":  "processing request in emailservice",
+            "errorMsg":  "error processing request in emailservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
           {
             "tags" : {
@@ -490,6 +539,13 @@
       },
       {
         "serviceName" : "adservice",
+        "logs": [
+          {
+            "msg":  "processing request in adservice",
+            "errorMsg":  "error processing request in adservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "tags": {

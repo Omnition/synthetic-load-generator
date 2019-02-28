@@ -1,12 +1,9 @@
 package io.omnition.loadgenerator.model.topology;
 
 import io.omnition.loadgenerator.model.trace.KeyValue;
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.StringMapMessage;
-import org.apache.logging.log4j.message.StructuredDataMessage;
+import org.apache.logging.log4j.CloseableThreadContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,13 +40,13 @@ public class ServiceTier {
         }
 
         for (Log log : logs) {
-            log.setContext(traceId, tags);
-            if (logIsError) {
-                logger.error(log.errorMsg, new RuntimeException(log.errorMsg));
-            } else {
-                logger.info(log.msg);
+            try (final CloseableThreadContext.Instance ctc = CloseableThreadContext.putAll(log.getContext(traceId, tags))) {
+                if (logIsError) {
+                    logger.error(log.errorMsg, new RuntimeException(log.errorMsg));
+                } else {
+                    logger.info(log.msg);
+                }
             }
-            MDC.clear();
         }
     }
 
