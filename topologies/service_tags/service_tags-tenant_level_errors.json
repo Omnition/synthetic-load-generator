@@ -2,7 +2,14 @@
   "topology" : {
     "services" : [
       {
-        "serviceName" : "frontend",
+        "serviceName": "frontend",
+        "logs": [
+          {
+            "msg": "processing request in frontend",
+            "errorMsg": "error processing request in frontend",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "tags" : {
@@ -65,7 +72,14 @@
         ]
       },
       {
-        "serviceName" : "productcatalogservice",
+        "serviceName": "productcatalogservice",
+        "logs": [
+          {
+            "msg": "processing request in productcatalogservice",
+            "errorMsg": "error processing request in productcatalogservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "tags": {
@@ -116,7 +130,14 @@
         ]
       },
       {
-        "serviceName" : "recommendationservice",
+        "serviceName": "recommendationservice",
+        "logs": [
+          {
+            "msg": "processing request in recommendationservice",
+            "errorMsg": "error processing request in recommendationservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
          {
             "tags": {
@@ -160,7 +181,14 @@
         ]
       },
       {
-        "serviceName" : "cartservice",
+        "serviceName": "cartservice",
+        "logs": [
+          {
+            "msg": "processing request in cartservice",
+            "errorMsg": "error processing request in cartservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
          {
             "tags": {
@@ -205,7 +233,14 @@
         ]
       },
       {
-        "serviceName" : "adservice",
+        "serviceName": "adservice",
+        "logs": [
+          {
+            "msg": "processing request in adservice",
+            "errorMsg": "error processing request in adservice",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets": [
          {
             "tags": {
