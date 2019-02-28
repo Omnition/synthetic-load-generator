@@ -3,6 +3,13 @@
     "services" : [
       {
         "serviceName" : "frontend",
+        "logs": [
+          {
+            "msg":  "processing request in frontend",
+            "errorMsg":  "error processing request in frontend",
+            "tagsToInclude":  ["tenant-level", "region", "version", "environment"]
+          }
+        ],
         "tagSets" : [
           {
             "tags" : {

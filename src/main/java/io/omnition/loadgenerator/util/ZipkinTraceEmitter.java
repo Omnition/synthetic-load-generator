@@ -13,8 +13,9 @@ import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMapInjectAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
-import org.apache.log4j.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zipkin2.codec.Encoding;
 import zipkin2.codec.SpanBytesEncoder;
 import zipkin2.reporter.AsyncReporter;
@@ -31,7 +32,7 @@ import java.util.function.Consumer;
 
 public class ZipkinTraceEmitter implements ITraceEmitter {
 
-    private static final Logger logger = Logger.getLogger(ZipkinTraceEmitter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZipkinTraceEmitter.class);
     private static final String V2_API = "/api/v2/spans";
     private static final String V1_API = "/api/v1/spans";
 
@@ -76,7 +77,7 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
             String encodedTraceId = URLDecoder.decode(baggage.get("X-B3-TraceId"), "UTF-8");
             return encodedTraceId.split(":")[0];
         } catch (UnsupportedEncodingException e) {
-            logger.error(e);
+            logger.error("Could not get traceID from zipkin", e);
             return null;
         }
     }

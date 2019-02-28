@@ -1,5 +1,13 @@
 package io.omnition.loadgenerator.model.topology;
 
+import io.omnition.loadgenerator.model.trace.KeyValue;
+import org.apache.logging.log4j.message.Message;
+import org.apache.logging.log4j.message.StringMapMessage;
+import org.apache.logging.log4j.message.StructuredDataMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ServiceTier {
+    public Logger logger = null;
     public String serviceName;
+    public List<Log> logs = new ArrayList<>();
     public List<TagSet> tagSets = new ArrayList<>();
     public List<ServiceRoute> routes = new ArrayList<>();
-    public List<String> instances = new ArrayList<>();
 
     private ConcurrentMap<String, TreeMap<Integer, TagSet>> mergedTagSets = new ConcurrentHashMap<>();
     private Random random = new Random();
@@ -22,6 +31,26 @@ public class ServiceTier {
         return this.routes.stream()
                 .filter(r -> r.route.equalsIgnoreCase(routeName))
                 .findFirst().get();
+    }
+
+    public void logMessages(String traceId, Map<String, KeyValue> tags, boolean logIsError) {
+        if (logs == null || logs.isEmpty()) {
+            return;
+        }
+
+        if (logger == null) {
+            logger = LoggerFactory.getLogger(serviceName);
+        }
+
+        for (Log log : logs) {
+            log.setContext(traceId, tags);
+            if (logIsError) {
+                logger.error(log.errorMsg, new RuntimeException(log.errorMsg));
+            } else {
+                logger.info(log.msg);
+            }
+            MDC.clear();
+        }
     }
 
     public TagSet getTagSet(String routeName) {

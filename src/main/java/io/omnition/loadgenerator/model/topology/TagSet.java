@@ -37,7 +37,7 @@ public class TagSet {
 
     public Map<String, KeyValue> getKeyValueMap() {
         return tags.entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, e -> KeyValue.FromObject(e.getKey(), e.getValue())));
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> KeyValue.FromObject(e.getKey(), e.getValue()), (e1, e2) -> e1));
     }
 
     public int randomLatency() {

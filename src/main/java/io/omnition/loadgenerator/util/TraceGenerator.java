@@ -1,20 +1,10 @@
 package io.omnition.loadgenerator.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
-
 import io.omnition.loadgenerator.model.topology.ServiceRoute;
 import io.omnition.loadgenerator.model.topology.ServiceTier;
-import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
 import io.omnition.loadgenerator.model.topology.TagSet;
 import io.omnition.loadgenerator.model.topology.Topology;
+import io.omnition.loadgenerator.model.topology.taggen.TagGeneratorWrapper;
 import io.omnition.loadgenerator.model.trace.KeyValue;
 import io.omnition.loadgenerator.model.trace.Reference;
 import io.omnition.loadgenerator.model.trace.Reference.RefType;
@@ -22,25 +12,43 @@ import io.omnition.loadgenerator.model.trace.Service;
 import io.omnition.loadgenerator.model.trace.Span;
 import io.omnition.loadgenerator.model.trace.Trace;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+
 public class TraceGenerator {
-    private final Random random = new Random();
-    private final Trace trace = new Trace();
     private Topology topology;
+    private ITraceEmitter emitter;
 
-    public static Trace generate(Topology topology, String rootServiceName, String rootRouteName, long startTimeMicros) {
-        TraceGenerator gen = new TraceGenerator(topology);
-        ServiceTier rootService = gen.topology.getServiceTier(rootServiceName);
-        Span rootSpan = gen.createSpanForServiceRouteCall(null, rootService, rootRouteName, startTimeMicros);
-        gen.trace.rootSpan = rootSpan;
-        gen.trace.addRefs();
-        return gen.trace;
-    }
-
-    private TraceGenerator(Topology topology) {
+    public TraceGenerator(ITraceEmitter emitter, Topology topology) {
+        this.emitter = emitter;
         this.topology = topology;
     }
 
-    private Span createSpanForServiceRouteCall(Map<String, KeyValue> parentTags, ServiceTier serviceTier, String routeName, long startTimeMicros) {
+    String generate(String rootServiceName, String rootRouteName, long startTimeMicros) {
+        ServiceTier rootService = topology.getServiceTier(rootServiceName);
+        Trace trace = new Trace();
+        trace.rootSpan = createSpanForServiceRouteCall(
+            trace, null, rootService, rootRouteName, startTimeMicros
+        );
+        trace.addRefs();
+        String traceID = emitter.emit(trace);
+        emitLogsForTrace(traceID, trace);
+        return traceID;
+    }
+
+    private Span createSpanForServiceRouteCall(
+        Trace trace,
+        Map<String, KeyValue> parentTags,
+        ServiceTier serviceTier,
+        String routeName,
+        long startTimeMicros
+    ) {
         ServiceRoute route = serviceTier.getRoute(routeName);
 
         // send tags of serviceTier and serviceTier instance
@@ -90,7 +98,7 @@ public class TraceGenerator {
             route.downstreamCalls.forEach((s, r) -> {
                 long childStartTimeMicros = startTimeMicros + TimeUnit.MILLISECONDS.toMicros(routeTags.randomLatency());
                 ServiceTier childSvc = this.topology.getServiceTier(s);
-                Span childSpan = createSpanForServiceRouteCall(tagsToSet, childSvc, r, childStartTimeMicros);
+                Span childSpan = createSpanForServiceRouteCall(trace, tagsToSet, childSvc, r, childStartTimeMicros);
                 Reference ref = new Reference(RefType.CHILD_OF, span.id, childSpan.id);
                 childSpan.refs.add(ref);
                 maxEndTime.set(Math.max(maxEndTime.get(), childSpan.endTimeMicros));
@@ -107,6 +115,13 @@ public class TraceGenerator {
         span.endTimeMicros = maxEndTime.get() + ownDuration;
         trace.addSpan(span);
         return span;
+    }
+
+    private void emitLogsForTrace(String traceId, Trace trace) {
+        for (Span span : trace.spans) {
+            Map<String, KeyValue> kvMap = span.tags.stream().collect(Collectors.toMap(kv -> kv.key, kv -> kv, (kv1, kv2) -> kv1));
+            topology.getServiceTier(span.service.serviceName).logMessages(traceId, kvMap, span.isErrorSpan());
+        }
     }
 
 }

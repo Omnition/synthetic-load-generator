@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 import io.jaegertracing.reporters.Reporter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
-import org.apache.log4j.Logger;
 
 import io.jaegertracing.Tracer;
 import io.jaegertracing.Tracer.Builder;
@@ -23,10 +22,12 @@ import io.omnition.loadgenerator.model.trace.Span;
 import io.omnition.loadgenerator.model.trace.Trace;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMapInjectAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JaegerTraceEmitter implements ITraceEmitter {
 
-    private final static Logger logger = Logger.getLogger(JaegerTraceEmitter.class);
+    private final static Logger logger = LoggerFactory.getLogger(JaegerTraceEmitter.class);
 
     private final Map<String, Tracer> serviceNameToTracer = new HashMap<>();
     private final String collectorUrl;
@@ -80,7 +81,7 @@ public class JaegerTraceEmitter implements ITraceEmitter {
             String encodedTraceId = URLDecoder.decode(baggage.get("uber-trace-id"), "UTF-8");
             return encodedTraceId.split(":")[0];
         } catch (UnsupportedEncodingException e) {
-            logger.error(e);
+            logger.error("Could not get TraceID from jaeger", e);
             return null;
         }
     }

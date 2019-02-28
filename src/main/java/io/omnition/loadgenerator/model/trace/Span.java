@@ -30,7 +30,14 @@ public class Span {
     }
 
     public void setHttpCode(int code) {
-        this.tags.add(KeyValue.ofLongType(SpanConventions.HTTP_STATUS_CODE_KEY, (long)code));
+        KeyValue httpTag = tags.stream()
+            .filter(kv -> kv.key.equalsIgnoreCase(SpanConventions.HTTP_STATUS_CODE_KEY))
+            .findFirst().orElse(null);
+        if (httpTag == null) {
+            this.tags.add(KeyValue.ofLongType(SpanConventions.HTTP_STATUS_CODE_KEY, (long) code));
+        } else {
+            httpTag.valueLong = (long)code;
+        }
     }
 
     public Integer getHttpCode() {
