@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import io.omnition.loadgenerator.LoadGeneratorParams.RootServiceRoute;
 import io.omnition.loadgenerator.util.JaegerTraceEmitter;
 import io.omnition.loadgenerator.util.ScheduledTraceGenerator;
-
+import io.omnition.loadgenerator.util.SummaryLogger;
 import zipkin2.codec.SpanBytesEncoder;
 
 public class App {
@@ -28,6 +28,9 @@ public class App {
 
     @Parameter(names = "--paramsFile", description = "Name of the file containing the topology params", required = true)
     private String topologyFile;
+
+    @Parameter(names = "--logLevel", description = "Level of log verbosity (1..2). If omitted defaults to 2, most verbose output.", required = false)
+    private Integer logLevel = 2;
 
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
@@ -52,6 +55,8 @@ public class App {
 
     private List<ScheduledTraceGenerator> scheduledTraceGenerators = new ArrayList<>();
     private final CountDownLatch latch = new CountDownLatch(1);
+
+    private final SummaryLogger summaryLogger = new SummaryLogger(App.logger);
 
     public static void main(String[] args) {
         App app = new App();
@@ -81,6 +86,9 @@ public class App {
             throw new FileNotFoundException(this.topologyFile);
         }
 
+        ScheduledTraceGenerator.LogLevel logLevel = this.logLevel<=1 ?
+            ScheduledTraceGenerator.LogLevel.Minimum : ScheduledTraceGenerator.LogLevel.Verbose;
+
         String json = new String(Files.readAllBytes(Paths.get(this.topologyFile)), "UTF-8");
         Gson gson = new Gson();
         LoadGeneratorParams params = gson.fromJson(json, LoadGeneratorParams.class);
@@ -90,7 +98,7 @@ public class App {
             for (RootServiceRoute route : params.rootRoutes) {
                 this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
                         params.topology, route.service, route.route,
-                        route.tracesPerHour, emitter));
+                        route.tracesPerHour, emitter, logLevel, summaryLogger));
             }
         }
     }

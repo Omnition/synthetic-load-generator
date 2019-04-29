@@ -22,14 +22,31 @@ public class ScheduledTraceGenerator {
     private final String route;
     private final ITraceEmitter emitter;
 
+    public enum LogLevel {
+        Minimum,
+        Verbose
+    }
+
+    private final LogLevel logLevel;
+    private final SummaryLogger summaryLogger;
+
     public ScheduledTraceGenerator(
-            Topology topology, String service, String route, int tracesPerHour, ITraceEmitter emitter) {
+            Topology topology,
+            String service,
+            String route,
+            int tracesPerHour,
+            ITraceEmitter emitter,
+            LogLevel logLevel,
+            SummaryLogger summaryLogger) {
+
         this.scheduler = Executors.newScheduledThreadPool(NUM_THREADS);
         this.tracesPerHour = tracesPerHour;
         this.topology = topology;
         this.service = service;
         this.route = route;
         this.emitter = emitter;
+        this.logLevel = logLevel;
+        this.summaryLogger = summaryLogger;
     }
 
     public void start() {
@@ -64,8 +81,12 @@ public class ScheduledTraceGenerator {
             long now = TimeUnit.MILLISECONDS.toMicros(System.currentTimeMillis());
             Trace trace = TraceGenerator.generate(this.topology, this.service, this.route, now);
             String traceId = this.emitter.emit(trace);
-            logger.info(String.format("Emitted traceId %s for service %s route %s",
+
+            if (this.logLevel == LogLevel.Verbose) {
+                logger.info(String.format("Emitted traceId %s for service %s route %s",
                     traceId, this.service, this.route));
+            }
+            this.summaryLogger.logEmit(1);
         } catch (Exception e) {
             logger.error(String.format("Error emit trace for service %s route %s, reason: %s",
                     this.service, this.route, e), e);
