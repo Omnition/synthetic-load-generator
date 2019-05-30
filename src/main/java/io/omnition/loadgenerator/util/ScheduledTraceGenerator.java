@@ -52,7 +52,9 @@ public class ScheduledTraceGenerator {
     }
 
     public void shutdown() {
+        logger.info("Shutting down...");
         scheduler.shutdown();
+        this.summaryLogger.flush();
         try {
             if (!scheduler.awaitTermination(GRACEFUL_SHUTDOWN_TIME_SEC, TimeUnit.SECONDS)) {
                 logger.error("Executor did not terminate in the specified time.");
