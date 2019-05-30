@@ -19,7 +19,9 @@ import com.google.gson.Gson;
 
 import io.omnition.loadgenerator.LoadGeneratorParams.RootServiceRoute;
 import io.omnition.loadgenerator.util.JaegerTraceEmitter;
+import io.omnition.loadgenerator.util.LogLevel;
 import io.omnition.loadgenerator.util.ScheduledTraceGenerator;
+import io.omnition.loadgenerator.util.SummaryLogger;
 
 import zipkin2.codec.SpanBytesEncoder;
 
@@ -28,6 +30,9 @@ public class App {
 
     @Parameter(names = "--paramsFile", description = "Name of the file containing the topology params", required = true)
     private String topologyFile;
+
+    @Parameter(names = "--logLevel", description = "Level of log verbosity (0..2). 0=Silent, 1=Minimum, 2=Verbose. If unspecified defaults to 2.", required = false)
+    private Integer logLevelParam = 2;
 
     @Parameter(names = "--jaegerCollectorUrl", description = "URL of the jaeger collector", required = false)
     private String jaegerCollectorUrl = null;
@@ -53,6 +58,9 @@ public class App {
     private List<ScheduledTraceGenerator> scheduledTraceGenerators = new ArrayList<>();
     private final CountDownLatch latch = new CountDownLatch(1);
 
+    private final SummaryLogger summaryLogger = new SummaryLogger(App.logger);
+    private LogLevel logLevel;
+
     public static void main(String[] args) {
         App app = new App();
         JCommander.newBuilder().addObject(app).build().parse(args);
@@ -75,6 +83,13 @@ public class App {
     }
 
     public void init() throws Exception {
+        if (this.logLevelParam < 0 || this.logLevelParam > 2) {
+            logger.warn("Invalid logLevel specified, using logLevel=2");
+            this.logLevelParam = 2;
+        }
+
+        this.logLevel = LogLevel.values()[this.logLevelParam];
+
         File f = new File(this.topologyFile);
         if(!f.exists() || f.isDirectory()) {
             logger.error("Invalid topology file specified: " + this.topologyFile);
@@ -90,7 +105,7 @@ public class App {
             for (RootServiceRoute route : params.rootRoutes) {
                 this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
                         params.topology, route.service, route.route,
-                        route.tracesPerHour, emitter));
+                        route.tracesPerHour, emitter, logLevel, summaryLogger));
             }
         }
     }

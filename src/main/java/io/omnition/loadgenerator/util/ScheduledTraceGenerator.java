@@ -22,14 +22,26 @@ public class ScheduledTraceGenerator {
     private final String route;
     private final ITraceEmitter emitter;
 
+    private final LogLevel logLevel;
+    private final SummaryLogger summaryLogger;
+
     public ScheduledTraceGenerator(
-            Topology topology, String service, String route, int tracesPerHour, ITraceEmitter emitter) {
+        Topology topology,
+        String service, 
+        String route, 
+        int tracesPerHour,
+        ITraceEmitter emitter, 
+        LogLevel logLevel, 
+        SummaryLogger summaryLogger
+    ) {
         this.scheduler = Executors.newScheduledThreadPool(NUM_THREADS);
         this.tracesPerHour = tracesPerHour;
         this.topology = topology;
         this.service = service;
         this.route = route;
         this.emitter = emitter;
+        this.logLevel = logLevel;
+        this.summaryLogger = summaryLogger;
     }
 
     public void start() {
@@ -45,8 +57,8 @@ public class ScheduledTraceGenerator {
             if (!scheduler.awaitTermination(GRACEFUL_SHUTDOWN_TIME_SEC, TimeUnit.SECONDS)) {
                 logger.error("Executor did not terminate in the specified time.");
                 List<Runnable> droppedTasks = scheduler.shutdownNow(); // optional **
-                logger.error("Executor was abruptly shut down. " + droppedTasks.size()
-                        + " tasks will not be executed.");
+                logger.error(
+                        "Executor was abruptly shut down. " + droppedTasks.size() + " tasks will not be executed.");
             } else {
                 logger.info("Graceful shutdown completed");
             }
@@ -64,11 +76,19 @@ public class ScheduledTraceGenerator {
             long now = TimeUnit.MILLISECONDS.toMicros(System.currentTimeMillis());
             Trace trace = TraceGenerator.generate(this.topology, this.service, this.route, now);
             String traceId = this.emitter.emit(trace);
-            logger.info(String.format("Emitted traceId %s for service %s route %s",
+
+            if (this.logLevel == LogLevel.Verbose) {
+                logger.info(String.format("Emitted traceId %s for service %s route %s",
                     traceId, this.service, this.route));
+            }
+            if (this.logLevel != LogLevel.Silent) {
+                this.summaryLogger.logEmit(1, trace.spans.size());
+            }
+
         } catch (Exception e) {
-            logger.error(String.format("Error emit trace for service %s route %s, reason: %s",
-                    this.service, this.route, e), e);
+            logger.error(
+                    String.format("Error emit trace for service %s route %s, reason: %s", this.service, this.route, e),
+                    e);
         }
     }
 }
