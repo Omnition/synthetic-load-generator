@@ -26,6 +26,8 @@ public class TraceGenerator {
     private final Trace trace = new Trace();
     private Topology topology;
 
+    private static final AtomicLong sequenceNumber = new AtomicLong(1);
+
     public static Trace generate(Topology topology, String rootServiceName, String rootRouteName, long startTimeMicros) {
         TraceGenerator gen = new TraceGenerator(topology);
         ServiceTier rootService = gen.topology.getServiceTier(rootServiceName);
@@ -50,6 +52,7 @@ public class TraceGenerator {
         span.startTimeMicros = startTimeMicros;
         span.operationName = route.route;
         span.service = service;
+        span.tags.add(KeyValue.ofLongType("load_generator.seq_num", sequenceNumber.getAndIncrement()));
 
         // Setup base tags
         span.setHttpMethodTag("GET");

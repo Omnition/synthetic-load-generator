@@ -55,15 +55,23 @@ public class SummaryLogger {
         this.logger = logger;
     }
 
+    public void flush() {
+        logEmit(0, 0, true);
+    }
+
     /**
      * Count emitted traces and output summary if enough time elapsed since last
      * output. This function is thread safe and can be called from multipler trace
      * emitters concurrently.
      */
     public void logEmit(long emittedTraces, long emittedSpans) {
+        logEmit(emittedTraces, emittedSpans, false);
+    }
+
+    public void logEmit(long emittedTraces, long emittedSpans, boolean flushLog) {
         // Keep data that will be logged in local variables that will live after the
         // synchornized block.
-        boolean emitLog = false;
+        boolean shouldEmitLog = false;
         double elapsedSec = 0;
         EmitCounters traceCounters = new EmitCounters();
         EmitCounters spanCounters = new EmitCounters();
@@ -74,6 +82,12 @@ public class SummaryLogger {
             this.traceCounters.add(emittedTraces);
             this.spanCounters.add(emittedSpans);
 
+            boolean forceLog = false;
+            if (flushLog && (this.traceCounters.emitsSinceLastSumLog!=0 || this.spanCounters.emitsSinceLastSumLog!=0)) {
+                // We were requested to flush the log. We must do it if any of the counters are changed since last log.
+                forceLog = true;
+            }
+
             // Copy counters to local variables to be used outside synchronized block.
             traceCounters.copyFrom(this.traceCounters);
             spanCounters.copyFrom(this.spanCounters);
@@ -82,7 +96,7 @@ public class SummaryLogger {
             long curNanoTime = System.nanoTime();
             long elapsedNano = curNanoTime - lastSumLogTimestampNano;
 
-            if (elapsedNano >= SummaryLogger.SUM_LOG_PERIOD_NANOSEC) {
+            if (elapsedNano >= SummaryLogger.SUM_LOG_PERIOD_NANOSEC || forceLog) {
                 // Calculate elapsed time in seconds since last output.
                 // Using ugly division since TimeUnit does not support floating point
                 // operations.
@@ -93,13 +107,13 @@ public class SummaryLogger {
                 this.traceCounters.resetLast();
                 this.spanCounters.resetLast();
 
-                emitLog = true;
+                shouldEmitLog = true;
             }
         }
 
         // Emit the log outsize synchronized block to avoid contention of other callers
         // on logging.
-        if (emitLog) {
+        if (shouldEmitLog) {
             logger.info(String.format("Emitted Traces: " + traceCounters.getPrintable(elapsedSec) + ", " + "Spans:  "
                     + spanCounters.getPrintable(elapsedSec)));
         }
