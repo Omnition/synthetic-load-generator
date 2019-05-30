@@ -32,3 +32,6 @@ target/*
 # IntelliJ files
 .idea/
 *.iml
+
+# VS Code files
+.vscode
