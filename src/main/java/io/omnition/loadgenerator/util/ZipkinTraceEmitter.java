@@ -68,6 +68,11 @@ public class ZipkinTraceEmitter implements ITraceEmitter {
         return traceId.getValue();
     }
 
+    @Override
+    public void close() {
+        // No close available.
+    }
+
     private String extractTraceID(Tracer tracer, Span otSpan) {
         HashMap<String, String> baggage = new HashMap<>();
         TextMapInjectAdapter map = new TextMapInjectAdapter(baggage);

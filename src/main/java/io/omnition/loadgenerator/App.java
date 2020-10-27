@@ -61,6 +61,8 @@ public class App {
     private final SummaryLogger summaryLogger = new SummaryLogger(App.logger);
     private LogLevel logLevel;
 
+    private List<ITraceEmitter> emitters;
+
     public static void main(String[] args) {
         App app = new App();
         JCommander.newBuilder().addObject(app).build().parse(args);
@@ -100,8 +102,8 @@ public class App {
         Gson gson = new Gson();
         LoadGeneratorParams params = gson.fromJson(json, LoadGeneratorParams.class);
         logger.info("Params: " + gson.toJson(params));
-        List<ITraceEmitter> emitters = getTraceEmitters();
-        for (ITraceEmitter emitter : emitters) {
+        this.emitters = getTraceEmitters();
+        for (ITraceEmitter emitter : this.emitters) {
             for (RootServiceRoute route : params.rootRoutes) {
                 this.scheduledTraceGenerators.add(new ScheduledTraceGenerator(
                         params.topology, route.service, route.route,
@@ -118,13 +120,12 @@ public class App {
     }
 
     public void shutdown() throws Exception {
-        for (ScheduledTraceGenerator gen : this.scheduledTraceGenerators) {
-            gen.shutdown();
-        }
+        this.scheduledTraceGenerators.forEach(ScheduledTraceGenerator::shutdown);
         for (ScheduledTraceGenerator gen : this.scheduledTraceGenerators) {
             gen.awaitTermination();
         }
         latch.countDown();
+        this.emitters.forEach(ITraceEmitter::close);
     }
 
     private List<ITraceEmitter> getTraceEmitters() {

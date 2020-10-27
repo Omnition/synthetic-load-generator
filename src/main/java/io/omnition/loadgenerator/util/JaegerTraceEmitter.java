@@ -37,6 +37,7 @@ public class JaegerTraceEmitter implements ITraceEmitter {
         this.flushIntervalMillis = flushIntervalMillis;
     }
 
+    @Override
     public void close() {
         serviceNameToTracer.forEach((name, tracer) -> tracer.close());
     }
