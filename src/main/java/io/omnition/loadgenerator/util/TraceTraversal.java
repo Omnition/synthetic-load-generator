@@ -3,7 +3,6 @@ package io.omnition.loadgenerator.util;
 import java.util.List;
 import java.util.function.Consumer;
 
-import io.omnition.loadgenerator.model.trace.Reference;
 import io.omnition.loadgenerator.model.trace.Span;
 import io.omnition.loadgenerator.model.trace.Trace;
 
@@ -19,12 +18,8 @@ public class TraceTraversal {
         Consumer<Span> postVisitConsumer
     ) {
         preVisitConsumer.accept(span);
-        List<Reference> outgoing = trace.spanIdToOutgoingRefs.get(span.id);
-        if (outgoing != null) {
-            outgoing.stream()
-            .map(ref -> trace.spanIdToSpan.get(ref.toSpanId))
-            .forEach(descendant -> prePostOrder(trace, descendant, preVisitConsumer, postVisitConsumer));
-        }
+        List<Span> outgoing = trace.spanIdToChildrenSpans.get(span.id);
+        outgoing.forEach(descendent -> prePostOrder(trace, descendent, preVisitConsumer, postVisitConsumer));
         postVisitConsumer.accept(span);
     }
 }
