@@ -1,3 +1,5 @@
+*NOTE: This repository is archived and is no longer recommended for use.*
+
 # Synthetic Load Generator
 
 The synthetic load generator is a utility to generate synthetic operational
