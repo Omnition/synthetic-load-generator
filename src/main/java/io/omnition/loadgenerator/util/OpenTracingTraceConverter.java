@@ -20,24 +20,12 @@ public final class OpenTracingTraceConverter {
             otSpanBuilder = addModelTag(tag, otSpanBuilder);
         }
         final Tracer.SpanBuilder finalSpanBuilder = otSpanBuilder;
-        span.refs.forEach(ref -> {
-            switch (ref.refType) {
-                case CHILD_OF:
-                    finalSpanBuilder.addReference(
-                            io.opentracing.References.CHILD_OF,
-                            parentSpans.get(ref.fromSpanId).context()
-                    );
-                    break;
-                case FOLLOWS_FROM:
-                    finalSpanBuilder.addReference(
-                            io.opentracing.References.FOLLOWS_FROM,
-                            parentSpans.get(ref.fromSpanId).context()
-                    );
-                    break;
-                default:
-                    break;
-            }
-        });
+        if (span.parentId != null) {
+            finalSpanBuilder.addReference(
+                io.opentracing.References.CHILD_OF,
+                parentSpans.get(span.parentId).context()
+            );
+        }
         return finalSpanBuilder.start();
     }
 

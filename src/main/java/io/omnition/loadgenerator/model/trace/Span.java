@@ -12,8 +12,8 @@ public class Span {
     public Long startTimeMicros;
     public Long endTimeMicros;
     public String operationName;
-    public List<KeyValue> tags = new ArrayList<>();
-    public List<Reference> refs = new ArrayList<>();
+    public final List<KeyValue> tags = new ArrayList<>();
+    public UUID parentId;
 
     public void markError() {
         this.tags.add(KeyValue.ofBooleanType(SpanConventions.IS_ERROR_KEY, true));

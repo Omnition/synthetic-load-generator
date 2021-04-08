@@ -10,7 +10,7 @@ public class Trace {
     public Span rootSpan;
     public List<Span> spans = new ArrayList<>();
     public Map<UUID, Span> spanIdToSpan = new HashMap<>();
-    public Map<UUID, List<Reference>> spanIdToOutgoingRefs = new HashMap<>();
+    public Map<UUID, List<Span>> spanIdToChildrenSpans = new HashMap<>();
 
     public void addSpan(Span span) {
         this.spans.add(span);
@@ -19,10 +19,7 @@ public class Trace {
 
     public void addRefs() {
         for (Span span : spans) {
-            for (Reference ref : span.refs) {
-                this.spanIdToOutgoingRefs.computeIfAbsent(ref.fromSpanId, id -> new ArrayList<>())
-                .add(ref);
-            }
+            this.spanIdToChildrenSpans.computeIfAbsent(span.parentId, id -> new ArrayList<>()).add(span);
         }
     }
 }

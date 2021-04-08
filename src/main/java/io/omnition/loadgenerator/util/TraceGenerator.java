@@ -15,8 +15,6 @@ import io.omnition.loadgenerator.model.topology.TagGenerator;
 import io.omnition.loadgenerator.model.topology.TagSet;
 import io.omnition.loadgenerator.model.topology.Topology;
 import io.omnition.loadgenerator.model.trace.KeyValue;
-import io.omnition.loadgenerator.model.trace.Reference;
-import io.omnition.loadgenerator.model.trace.Reference.RefType;
 import io.omnition.loadgenerator.model.trace.Service;
 import io.omnition.loadgenerator.model.trace.Span;
 import io.omnition.loadgenerator.model.trace.Trace;
@@ -101,8 +99,7 @@ public class TraceGenerator {
                 long childStartTimeMicros = startTimeMicros + TimeUnit.MILLISECONDS.toMicros(random.nextInt(route.maxLatencyMillis));
                 ServiceTier childSvc = this.topology.getServiceTier(s);
                 Span childSpan = createSpanForServiceRouteCall(routeTags, childSvc, r, childStartTimeMicros);
-                Reference ref = new Reference(RefType.CHILD_OF, span.id, childSpan.id);
-                childSpan.refs.add(ref);
+                childSpan.parentId = span.id;
                 maxEndTime.set(Math.max(maxEndTime.get(), childSpan.endTimeMicros));
                 if (childSpan.isErrorSpan()) {
                     Integer httpCode = childSpan.getHttpCode();
